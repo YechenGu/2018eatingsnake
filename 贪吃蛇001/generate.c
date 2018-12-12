@@ -17,7 +17,7 @@
 #define radius 10
 
 extern int poison_x,poison_y;
-extern int bomb_x,bomb_y;
+extern int food_x,food_y;
 extern int foodState;  //  food remaining
 extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
@@ -26,78 +26,86 @@ extern int preSnakeCount;
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
-extern node *foodFirst,*foodLast,*f1,*f2,*f3,*f;
+extern node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 
 extern char input;
 extern char oldInput;
 extern unsigned long seed;
-extern int map1[10][2];
+extern int map1[2][2];
 extern int loopTime1;
-
+extern int map2[12][2];
+extern int loopTime2;
+extern int remoteLevel;
 
 
 
 void generatefood()     // not must execute
 {
-    f1 = (node *)malloc(sizeof(node));
+    seed++;
     srand(seed);
-    f1->x=rand()%(Width-20)+10;
-    f1->x-=(f1->x%20);
-    if (f1->x == 0)
+    food_x=rand()%(Width-20)+10;
+    food_x-=(food_x%20);
+    if (food_x == 0)
     {
-        f1->x = 20;
+        food_x = distance;
     }
-    f1->y=rand()%(Height-20)+10;
-    f1->y-=(f1->y%20);
-    if (f1->y == 0)
+    food_y=rand()%(Height-20)+10;
+    food_y-=(food_y%20);
+    if (food_y == 0)
     {
-        f1->y = 20;
+        food_y = distance;
+    }
+    if (remoteLevel == 1) {
+        for (int a = 0; a<loopTime1; a++)
+        {
+            if  ((food_x-map1[a][0]<20&&map1[a][0]-food_x<20)&&(food_y-map1[a][1]<20&&map1[a][1]-food_y<20))
+                generatefood();
+        }
+    }
+    else if (remoteLevel == 2) {
+        for (int a = 0; a<loopTime2; a++)
+        {
+            if  ((food_x-map2[a][0]<20&&map2[a][0]-food_x<20)&&(food_y-map2[a][1]<20&&map2[a][1]-food_y<20))
+                generatefood();
+        }
     }
     
-    
-    for (int a = 0; a<loopTime1; a++) {
-        if  ((f1->x-map1[a][0]<15&&map1[a][0]-f1->x<15)&&(f1->y-map1[a][1]<15&&map1[a][1]-f1->y<15))
-            generatefood();
-    }
-    if (((poison_x-f1->x<20&&f1->x-poison_x<20)&&(poison_y-f1->y<20&&f1->y-poison_y<20))||((bomb_x-f1->x<20&&f1->x-bomb_x<20)&&(f1->y-bomb_y<20&&bomb_y-f1->y<20)))
+    if ((poison_x-food_x<20&&food_x-poison_x<20)&&(poison_y-food_y<20&&food_y-poison_y<20))
     {
         seed++;
         generatefood();
     }
     for (p = head;p ->next != NULL ; p = p->next )
     {
-        if ((p->x-f1->x<20&&f1->x-p->x<20)&&(p->y-f1->y<20&&f1->y-p->y<20))
+        if ((p->x-food_x<20&&food_x-p->x<20)&&(p->y-food_y<20&&food_y-p->y<20))
         {
             seed++;
             generatefood();
         }
     }
-    if ((tail->x-f1->x<20&&f1->x-tail->x<20)&&(tail->y-f1->y<20&&f1->y-tail->y<20))
+    if ((tail->x-food_x<20&&food_x-tail->x<20)&&(tail->y-food_y<20&&food_y-tail->y<20))
     {
         seed++;
         generatefood();
     }
-    //  ++++++++++++++++++++++++++++++++++food self
-    for (f = foodFirst;f ->next != NULL ; f = f->next )
+    
+    for (b = bombFirst;b ->next != NULL ; b = b->next )
     {
-        if ((f->x-f1->x<20&&f1->x-f->x<20)&&(f->y-f1->y<20&&f1->y-f->y<20))
+        
+        if ((b->x-food_x<20&&food_x-b->x<20)&&(b->y-food_y<20&&food_y-b->y<20))
         {
             seed++;
             generatefood();
         }
     }
-    if ((foodLast->x-f1->x<20&&f1->x-foodLast->x<20)&&(foodLast->y-f1->y<20&&f1->y-foodLast->y<20))
+    if ((bombLast->x-food_x<20&&food_x-bombLast->x<20)&&(bombLast->y-food_y<20&&food_y-bombLast->y<20))
     {
         seed++;
         generatefood();
     }
-    foodLast->next = f1;
-    f1->previous = foodLast;
-    f1->next = NULL;
-    foodLast = f1;
     setcolor(GREEN);
     setfillcolor(BLUE);
-    fillcircle(f1->x,f1->y,radius);
+    fillcircle(food_x,food_y,radius);
     foodState = 1;
 }
 //*********************************************************************************************************************************************************************************
@@ -119,16 +127,29 @@ void generatepoison()     // not must execute
         poison_y = 20;
     }
     
-    
-    for (int a = 0; a<loopTime1; a++) {
-        if  ((poison_x-map1[a][0]<15&&map1[a][0]-poison_x<15)&&(poison_y-map1[a][1]<15&&map1[a][1]-poison_y<15))
-            generatefood();
+    if (remoteLevel == 1)
+    {
+        for (int a = 0; a<loopTime1; a++)
+        {
+            if  ((poison_x-map1[a][0]<20&&map1[a][0]-poison_x<20)&&(poison_y-map1[a][1]<20&&map1[a][1]-poison_y<20))
+                generatepoison();
+        }
     }
-    if ((poison_x-bomb_x<20&&bomb_x-poison_x<20)&&(poison_y-bomb_y<20&&bomb_y-poison_y<20))
+    else if (remoteLevel == 2)
+    {
+        for (int a = 0; a<loopTime2; a++)
+        {
+            if  ((poison_x-map2[a][0]<20&&map2[a][0]-poison_x<20)&&(poison_y-map2[a][1]<20&&map2[a][1]-poison_y<20))
+                generatepoison();
+        }
+    }
+    
+    if ((poison_x-food_x<20&&food_x-poison_x<20)&&(poison_y-food_y<20&&food_y-poison_y<20))
     {
         seed++;
         generatepoison();
     }
+    
     for (p = head;p ->next != NULL ; p = p->next )
     {
         
@@ -144,16 +165,16 @@ void generatepoison()     // not must execute
         generatepoison();
     }
     
-    for (f = foodFirst;f ->next != NULL ; f = f->next )
+    for (b = bombFirst;b ->next != NULL ; b = b->next )
     {
         
-        if ((f->x-poison_x<20&&poison_x-f->x<20)&&(f->y-poison_y<20&&poison_y-f->y<20))
+        if ((b->x-poison_x<20&&poison_x-b->x<20)&&(b->y-poison_y<20&&poison_y-b->y<20))
         {
             seed++;
             generatepoison();
         }
     }
-    if ((foodLast->x-poison_x<20&&poison_x-foodLast->x<20)&&(foodLast->y-poison_y<20&&poison_y-foodLast->y<20))
+    if ((bombLast->x-poison_x<20&&poison_x-bombLast->x<20)&&(bombLast->y-poison_y<20&&poison_y-bombLast->y<20))
     {
         seed++;
         generatepoison();
@@ -167,69 +188,76 @@ void generatepoison()     // not must execute
 //**********************************************************************************************************************************************************************************
 void generatebomb()
 {
-    seed++;
-    srand(seed);
-    bomb_x=rand()%(Width-20)+10;
-    bomb_x-=(bomb_x%20);
-    if (bomb_x == 0)
+    b1 = (node *)malloc(sizeof(node));
+    b1->x=rand()%(Width-20)+10;
+    b1->x-=(b1->x%20);
+    if (b1->x == 0)
     {
-        bomb_x = distance;
+        b1->x = 20;
     }
-    bomb_y=rand()%(Height-20)+10;
-    bomb_y-=(bomb_x%20);
-    if (bomb_y == 0)
+    b1->y=rand()%(Height-20)+10;
+    b1->y-=(b1->y%20);
+    if (b1->y == 0)
     {
-        bomb_y = distance;
+        b1->y = 20;
     }
     
-    for (int a = 0; a<loopTime1; a++) {
-        if  ((bomb_x-map1[a][0]<15&&map1[a][0]-bomb_x<15)&&(bomb_y-map1[a][1]<15&&map1[a][1]-bomb_y<15))
-            generatefood();
+    if (remoteLevel == 1)
+    {
+        for (int a = 0; a<loopTime1; a++)
+        {
+            if  ((b1->x-map1[a][0]<20&&map1[a][0]-b1->x<20)&&(b1->y-map1[a][1]<20&&map1[a][1]-b1->y<20))
+                generatebomb();
+        }
     }
-    if ((poison_x-bomb_x<20&&bomb_x-poison_x<20)&&(poison_y-bomb_y<20&&bomb_y-poison_y<20))
+    else if (remoteLevel == 2)
+    {
+        for (int a = 0; a<loopTime1; a++)
+        {
+            if  ((b1->x-map2[a][0]<20&&map2[a][0]-b1->x<20)&&(b1->y-map2[a][1]<20&&map2[a][1]-b1->y<20))
+                generatebomb();
+        }
+    }
+    
+    if (((poison_x-b1->x<20&&b1->x-poison_x<20)&&(poison_y-b1->y<20&&b1->y-poison_y<20))||((food_x-b1->x<20&&b1->x-food_x<20)&&(b1->y-food_y<20&&food_y-b1->y<20)))
     {
         seed++;
         generatebomb();
     }
     for (p = head;p ->next != NULL ; p = p->next )
     {
-        
-        if ((p->x-bomb_x<20&&bomb_x-p->x<20)&&(p->y-bomb_y<20&&bomb_y-p->y<20))
+        if ((p->x-b1->x<20&&b1->x-p->x<20)&&(p->y-b1->y<20&&b1->y-p->y<20))
         {
             seed++;
             generatebomb();
         }
     }
-    if ((tail->x-bomb_x<20&&bomb_x-tail->x<20)&&(tail->y-bomb_y<20&&bomb_y-tail->y<20))
+    if ((tail->x-b1->x<20&&b1->x-tail->x<20)&&(tail->y-b1->y<20&&b1->y-tail->y<20))
     {
         seed++;
         generatebomb();
     }
-    
-    for (f = foodFirst;f ->next != NULL ; f = f->next )
+    //  ++++++++++++++++++++++++++++++++++food self
+    for (b = bombFirst;b ->next != NULL ; b = b->next )
     {
-        
-        if ((f->x-bomb_x<20&&bomb_x-f->x<20)&&(f->y-bomb_y<20&&bomb_y-f->y<20))
+        if ((b->x-b1->x<20&&b1->x-b->x<20)&&(b->y-b1->y<20&&b1->y-b->y<20))
         {
             seed++;
-            generatepoison();
+            generatebomb();
         }
     }
-    if ((foodLast->x-bomb_x<20&&bomb_x-foodLast->x<20)&&(foodLast->y-bomb_y<20&&bomb_y-foodLast->y<20))
+    if ((bombLast->x-b1->x<20&&b1->x-bombLast->x<20)&&(bombLast->y-b1->y<20&&b1->y-bombLast->y<20))
     {
         seed++;
-        generatepoison();
+        generatebomb();
     }
+    bombLast->next = b1;
+    b1->previous = bombLast;
+    b1->next = NULL;
+    bombLast = b1;
     setcolor(BROWN);
     setfillcolor(RED);
-    fillcircle(bomb_x,bomb_y,radius);
-    bombState = 1;
+    fillcircle(b1->x,b1->y,radius);
+    bombtate = 1;
 }
-
-
-
-
-
-
-
 

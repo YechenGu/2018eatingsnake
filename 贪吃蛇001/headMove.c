@@ -17,7 +17,7 @@
 #define radius 10
 
 extern int poison_x,poison_y;
-extern int bomb_x,bomb_y;
+extern int food_x,food_y;
 extern int foodState;  //  food remaining
 extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
@@ -27,14 +27,12 @@ extern int preSnakeCount;
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
-extern node *foodFirst,*foodLast,*f1,*f2,*f3,*f;
+extern node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 
 extern char input;
 extern char oldInput;
 extern unsigned long seed;
 
-extern node *head,*tail,*p1,*p2,*p3,*p;
-extern node *foodFirst,*foodLast,*f1,*f2,*f3,*f;
 
 void headMove()
 {
@@ -154,34 +152,55 @@ void headMove()
     head->previous = p1;
     head = p1;
     
-    if ((head->x-foodFirst->x<20 && foodFirst->x-head->x<20)&&(head->y-foodFirst->y<20 && foodFirst->y-head->y<20)) {           //eat the food
-        foodState = 0;
+    if ((head->x-bombFirst->x<20 && bombFirst->x-head->x<20)&&(head->y-bombFirst->y<20 && bombFirst->y-head->y<20)) {           //eat the bomb
+        bombState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
-        fillcircle(foodFirst->x,foodFirst->y,radius);
-        (foodFirst->next)->previous = NULL;
-        foodFirst = foodFirst->next;
-        snakeCount++;
-    }
-    for (f = foodFirst->next;f->next!=NULL;f=f->next){
-        if ((head->x-f->x<20 && f->x-head->x<20)&&(head->y-f->y<20 && f->y-head->y<20)) {           //eat the food
-            foodState = 0;
-            setcolor(BLACK);
-            setfillcolor(BLACK);
-            fillcircle(f->x,f->y,radius);
-            (f->previous)->next = f->next;
-            (f->next)->previous = f->previous;
-            snakeCount++;
+        fillcircle(bombFirst->x,bombFirst->y,radius);
+        (bombFirst->next)->previous = NULL;
+        bombFirst = bombFirst->next;
+        if (snakeCount % 2 == 0)
+        {
+            snakeCount /= 2;
+        }
+        else
+        {
+            snakeCount = (snakeCount+1)/2;
         }
     }
-    if ((head->x-foodLast->x<20 && foodLast->x-head->x<20)&&(head->y-foodLast->y<20 && foodLast->y-head->y<20)) {           //eat the food
+    for (b = bombFirst->next;b->next!=NULL;b=b->next){
+        if ((head->x-b->x<20 && b->x-head->x<20)&&(head->y-b->y<20 && b->y-head->y<20)) {           //eat the food
+            bombState = 0;
+            setcolor(BLACK);
+            setfillcolor(BLACK);
+            fillcircle(b->x,b->y,radius);
+            (b->previous)->next = b->next;
+            (b->next)->previous = b->previous;
+            if (snakeCount % 2 == 0)
+            {
+                snakeCount /= 2;
+            }
+            else
+            {
+                snakeCount = (snakeCount+1)/2;
+            }
+        }
+    }
+    if ((head->x-bombLast->x<20 && bombLast->x-head->x<20)&&(head->y-bombLast->y<20 && bombLast->y-head->y<20)) {           //eat the food
         foodState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
-        fillcircle(foodLast->x,foodLast->y,radius);
-        (foodLast->previous)->next = NULL;
-        foodLast = foodLast->previous;
-        snakeCount++;
+        fillcircle(bombLast->x,bombLast->y,radius);
+        (bombLast->previous)->next = NULL;
+        bombLast = bombLast->previous;
+        if (snakeCount % 2 == 0)
+        {
+            snakeCount /= 2;
+        }
+        else
+        {
+            snakeCount = (snakeCount+1)/2;
+        }
     }
     
     
@@ -193,19 +212,12 @@ void headMove()
         snakeCount--;
     }
     
-    if ((head->x-bomb_x<20 && bomb_x-head->x<20)&&(head->y-bomb_y<20 && bomb_y-head->y<20)) {      //eat the bomb
-        bombState = 0;
+    if ((head->x-bomb_x<20 && bomb_x-head->x<20)&&(head->y-bomb_y<20 && bomb_y-head->y<20)) {      //eat the food
+        foodState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
-        fillcircle(bomb_x,bomb_y,radius);
-        if (snakeCount % 2 == 0)
-        {
-            snakeCount /= 2;
-        }
-        else
-        {
-            snakeCount = (snakeCount+1)/2;
-        }
+        fillcircle(food_x,food_y,radius);
+        snakeCount++;
     }
     
     
