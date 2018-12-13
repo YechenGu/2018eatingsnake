@@ -23,7 +23,7 @@ extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
 extern int snakeCount;
 extern int preSnakeCount;
-
+extern int state[32][32];
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
@@ -151,7 +151,8 @@ void headMove()
     p1 ->next = head;
     head->previous = p1;
     head = p1;
-    
+    state[head->x/20][head ->y/20] = 4;
+    //=========== not deal yet
     if ((head->x-bombFirst->x<20 && bombFirst->x-head->x<20)&&(head->y-bombFirst->y<20 && bombFirst->y-head->y<20)) {           //eat the bomb
         bombState = 0;
         setcolor(BLACK);
@@ -169,7 +170,7 @@ void headMove()
         }
     }
     for (b = bombFirst->next;b->next!=NULL;b=b->next){
-        if ((head->x-b->x<20 && b->x-head->x<20)&&(head->y-b->y<20 && b->y-head->y<20)) {           //eat the food
+        if ((head->x-b->x<20 && b->x-head->x<20)&&(head->y-b->y<20 && b->y-head->y<20)) {           //eat the bomb
             bombState = 0;
             setcolor(BLACK);
             setfillcolor(BLACK);
@@ -186,7 +187,7 @@ void headMove()
             }
         }
     }
-    if ((head->x-bombLast->x<20 && bombLast->x-head->x<20)&&(head->y-bombLast->y<20 && bombLast->y-head->y<20)) {           //eat the food
+    if ((head->x-bombLast->x<20 && bombLast->x-head->x<20)&&(head->y-bombLast->y<20 && bombLast->y-head->y<20)) {           //eat the bomb
         foodState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);

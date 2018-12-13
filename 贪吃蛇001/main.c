@@ -20,6 +20,7 @@ int poisonState = 1;  // poison remaining
 int bombState = 1;   // bomb remaining
 int snakeCount = 3;
 int preSnakeCount = 3;
+int state[32][32]={0};  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
 
 
 node *head,*tail,*p1,*p2,*p3,*p;
@@ -85,6 +86,7 @@ void game(int level)
         for (a=0; a<loopTime1; a++)      //draw the map wall   >>>
         {
             solidrectangle(map1[a][0]-10,map1[a][1]-10,map1[a][0]+8,map1[a][1]+8);
+            state[map1[a][0]][map1[a][1]] = 4;
         }
     }
     else if (level == 2)
@@ -92,6 +94,7 @@ void game(int level)
         for (a=0; a<loopTime2; a++)      //draw the map wall   >>>
         {
             solidrectangle(map2[a][0]-10,map2[a][1]-10,map2[a][0]+8,map2[a][1]+8);
+            state[map2[a][0]][map2[a][1]] = 4;
         }
     }
     
@@ -146,6 +149,7 @@ void game(int level)
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(tail->x,tail->y,radius);
+            state[tail->x/20][tail->y/20] = 0;
             (tail->previous)->next=NULL;
             tail=tail->previous;
         }
@@ -159,9 +163,11 @@ void game(int level)
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(tail->x,tail->y,radius);
+            state[tail->x/20][tail->y/20] = 0;
             (tail->previous)->next=NULL;
             tail=tail->previous;
             fillcircle(tail->x,tail->y,radius);
+            state[tail->x/20][tail->y/20] = 0;
             (tail->previous)->next=NULL;
             tail=tail->previous;
             score -= 200;
@@ -171,9 +177,10 @@ void game(int level)
         {
             setcolor(BLACK);
             setfillcolor(BLACK);
-            for (int j = 0;j <= preSnakeCount - snakeCount;j++)      // i∫Õj±‰¡ø√˚≥ÂÕª
+            for (int j = 0;j <= preSnakeCount - snakeCount;j++)      //
             {
                 fillcircle(tail->x,tail->y,radius);
+                state[tail->x/20][tail->y/20] = 0;
                 (tail->previous)->next=NULL;
                 tail=tail->previous;
             }
@@ -246,10 +253,13 @@ void startUp()
     
     p1->x=120;
     p1->y=200;
+    state[p1->x/20][p1->y/20] = 4;
     p2->x=100;
     p2->y=200;
+    state[p2->x/20][p2->y/20] = 4;
     p3->x=80;
     p3->y=200;
+    state[p3->x/20][p3->y/20] = 4;
     p1->next = p2;
     p2->next = p3;
     p3->next = NULL;
@@ -277,10 +287,13 @@ void startUp()
     
     b1->x=320;
     b1->y=360;
+    state[b1->x/20][b1->y/20] = 3;
     b2->x=480;
     b2->y=520;
+    state[b2->x/20][b2->y/20] = 3;
     b3->x=240;
     b3->y=60;
+    state[b3->x/20][b3->y/20] = 3;
     b1->next = b2;
     b2->next = b3;
     b3->next = NULL;
@@ -320,7 +333,7 @@ void startUp()
  从上方开始顺时针
  
  
- */
+
 
 
 void smartGrass()
@@ -333,3 +346,4 @@ void smartGrass()
         }
     }
 }
+ */

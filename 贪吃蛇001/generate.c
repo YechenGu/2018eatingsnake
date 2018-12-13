@@ -36,6 +36,7 @@ extern int loopTime1;
 extern int map2[12][2];
 extern int loopTime2;
 extern int remoteLevel;
+extern int state[32][32];
 
 
 
@@ -106,6 +107,7 @@ void generatefood()     // not must execute
     setcolor(GREEN);
     setfillcolor(BLUE);
     fillcircle(food_x,food_y,radius);
+    state[food_x/20][food_y/20] = 1;
     foodState = 1;
 }
 //*********************************************************************************************************************************************************************************
@@ -182,6 +184,7 @@ void generatepoison()     // not must execute
     setcolor(GREEN);
     setfillcolor(YELLOW);
     fillcircle(poison_x,poison_y,radius);
+    state[poison_x/20][poison_y/20] = 2;
     poisonState = 1;
 }
 
@@ -258,6 +261,7 @@ void generatebomb()
     setcolor(BROWN);
     setfillcolor(RED);
     fillcircle(b1->x,b1->y,radius);
+    state[b1->x/20][b1->y/20] = 3;
     bombtate = 1;
 }
 
