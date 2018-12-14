@@ -38,7 +38,7 @@ void headMove()
 {
     p1 = (node *)malloc(sizeof(node));
     //
-    if (kbhit())
+    if (kbhit())     // the user touches the keyboard
     {
         input = getch();
         

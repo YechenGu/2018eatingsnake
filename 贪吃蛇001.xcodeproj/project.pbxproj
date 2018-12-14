@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		226F97BA21B8206F00B14D2E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 226F97B921B8206F00B14D2E /* main.c */; };
+		229CDAD921C3B4DB00FF7CEA /* smartGrass.c in Sources */ = {isa = PBXBuildFile; fileRef = 229CDAD821C3B4DB00FF7CEA /* smartGrass.c */; };
 		22D1DAD621BE46260063F791 /* generate.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DAD521BE46260063F791 /* generate.c */; };
 		22D1DAD921BE48B40063F791 /* headMove.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DAD821BE48B40063F791 /* headMove.c */; };
 		22D1DAE021BE4CDD0063F791 /* map1.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DADF21BE4CDD0063F791 /* map1.c */; };
@@ -28,6 +29,8 @@
 /* Begin PBXFileReference section */
 		226F97B621B8206F00B14D2E /* 贪吃蛇001 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "贪吃蛇001"; sourceTree = BUILT_PRODUCTS_DIR; };
 		226F97B921B8206F00B14D2E /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		229CDAD721C3B4DB00FF7CEA /* smartGrass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = smartGrass.h; sourceTree = "<group>"; };
+		229CDAD821C3B4DB00FF7CEA /* smartGrass.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = smartGrass.c; sourceTree = "<group>"; };
 		22BCF69E21C0CE580041F600 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		22D1DAD421BE46260063F791 /* generate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = generate.h; sourceTree = "<group>"; };
 		22D1DAD521BE46260063F791 /* generate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = generate.c; sourceTree = "<group>"; };
@@ -68,6 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				226F97B921B8206F00B14D2E /* main.c */,
+				229CDAD721C3B4DB00FF7CEA /* smartGrass.h */,
+				229CDAD821C3B4DB00FF7CEA /* smartGrass.c */,
 				22D1DADE21BE4CDD0063F791 /* map1.h */,
 				22BCF69E21C0CE580041F600 /* main.h */,
 				22D1DADF21BE4CDD0063F791 /* map1.c */,
@@ -137,6 +142,7 @@
 			files = (
 				22D1DAD621BE46260063F791 /* generate.c in Sources */,
 				226F97BA21B8206F00B14D2E /* main.c in Sources */,
+				229CDAD921C3B4DB00FF7CEA /* smartGrass.c in Sources */,
 				22D1DAE021BE4CDD0063F791 /* map1.c in Sources */,
 				22D1DAD921BE48B40063F791 /* headMove.c in Sources */,
 			);
