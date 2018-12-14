@@ -36,7 +36,7 @@ extern int loopTime1;
 extern int map2[12][2];
 extern int loopTime2;
 extern int remoteLevel;
-extern int state[32][32];
+extern int state[33][33];
 
 
 

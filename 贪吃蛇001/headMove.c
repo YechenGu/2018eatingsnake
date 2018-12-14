@@ -23,7 +23,7 @@ extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
 extern int snakeCount;
 extern int preSnakeCount;
-extern int state[32][32];
+extern int state[33][33];
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;

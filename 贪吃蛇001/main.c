@@ -1,4 +1,3 @@
-// I will get down to replacing food with bomb
 
 #include <stdio.h>
 #include <graphics.h>
@@ -20,7 +19,7 @@ int poisonState = 1;  // poison remaining
 int bombState = 1;   // bomb remaining
 int snakeCount = 3;
 int preSnakeCount = 3;
-int state[32][32]={0};  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
+int state[33][33]={0};  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
 
 
 node *head,*tail,*p1,*p2,*p3,*p;

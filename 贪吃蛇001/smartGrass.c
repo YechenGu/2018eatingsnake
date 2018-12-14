@@ -17,7 +17,7 @@
 #define radius 10
 
 extern int food_x,food_y;
-extern int state[32][32];
+extern int state[33][33];
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
