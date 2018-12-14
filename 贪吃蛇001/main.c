@@ -52,7 +52,8 @@ int main()
 labelWelcome:welcome();
     remoteLevel = 1;
     game(1);
-labelGame2:remoteLevel = 2;
+labelGame2:Sleep(300);
+    remoteLevel = 2;
     game(2);
 labelGameOver:gameOver();
     EndBatchDraw();
@@ -232,18 +233,22 @@ void startUp()
     for ( i = 0;i <= Height;i += radius)
     {
         solidrectangle(0,i,8,i+8);
-    }
-    for ( i = 0;i <= Height;i += radius)
-    {
         solidrectangle(Width-radius,i,Width-2,i+8);
-    }
-    for ( i = 10; i <= Width-10;i+=radius)
-    {
-        solidrectangle(i,0,i+8,8);
     }
     for ( i = 10; i <= Width-radius;i+=radius)
     {
+        solidrectangle(i,0,i+8,8);
         solidrectangle(i,Height-radius,i+8,Height-2);
+    }
+    
+    for (i=0; i<=Height; i+=20)
+    {
+        state[0][i/20] = 4;
+        state[Width/20][i/20] = 4;
+    }
+    for (i=20; i<=Width-distance; i+=20) {
+        state[i/20][0] = 4;
+        state[i/20][Height/20] = 4;
     }
     
     //=======================================   draw the init snake
@@ -276,8 +281,10 @@ void startUp()
     for (p = head;p ->next != NULL ; p = p->next )
     {
         fillcircle(p->x,p->y,radius);
+        state[p->x/20][p->y/20] = 4;
     }
     fillcircle(tail->x,tail->y,radius);
+    state[tail->x/20][tail->y/20] = 4;
     
     //==================================  draw the init bomb
     
@@ -309,8 +316,10 @@ void startUp()
     for (b = bombFirst;b ->next != NULL ;b = b->next )
     {
         fillcircle(b->x,b->y,radius);
+        state[b->x/20][b->y/20] = 3;
     }
     fillcircle(bombLast->x,bombLast->y,radius);
+    state[bombLast->x/20][bombLast->y/20] = 3;
 }
 
 
@@ -332,18 +341,146 @@ void startUp()
  
  从上方开始顺时针
  
- 
+ */
 
 
 
 void smartGrass()
 {
-    if (head->x==food_x&&head->y<food_y) {
-        if (oldInput == 'w') {
-            if (<#condition#>) {
-                <#statements#>
-            }
+    while(head->x!=food_x && head->y!=food_y)
+  {
+//****************************== Situation 1 ==****************************//
+    if (head->x==food_x&&head->y<food_y)       //food is up of the snake
+    {
+            if (oldInput == 'w')      // snake is moving up
+         {
+               if (state[head->x/20][head->y/20+1] == 0 )
+               {}// moving up
+               else if (state[head->x/20+1][head->y/20] == 0)
+               {}// moving right
+               else if (state[head->x/20-1][head->y/20] == 0)
+               {}// moving left
+               else {}//pause,and wait for the user order
+         }
+           else if (oldInput == 'a')      // snake is moving  left
+         {
+               if (state[head->x/20][head->y/20+1] == 0 )
+               {}// moving up
+               else if (state[head->x/20-1][head->y/20] == 0)
+               {}// moving left
+               else if (state[head->x/20][head->y/20-1] == 0)
+               {}// moving down
+               else {}//pause,and wait for the user order
+        }
+          else if (oldInput == 'd')      // snake is moving right
+        {
+               if (state[head->x/20][head->y/20+1] == 0 )
+               {}// moving up
+               else if (state[head->x/20+1][head->y/20] == 0)
+               {}// moving right
+               else if (state[head->x/20][head->y/20-1] == 0)
+               {}// moving down
+               else {}//pause,and wait for the user order
+        }
+          else if (oldInput == 's')      // snake is moving down
+        {
+               if (state[head->x/20-1][head->y/20] == 0 )
+               {}// moving left
+               else if (state[head->x/20+1][head->y/20] == 0)
+               {}// moving right
+               else if (state[head->x/20][head->y/20-1] == 0)
+               {}// moving down
+               else {}//pause,and wait for the user order
         }
     }
+//****************************== Situation 2 ==****************************//
+    if (head->x<food_x&&head->y<food_y)       //food is up and right of the snake
+    {
+          if (oldInput == 'w')      // snake is moving up
+          {
+              if (state[head->x/20][head->y/20+1] == 0 )
+              {}// moving up
+              else if (state[head->x/20+1][head->y/20] == 0)
+              {}// moving right
+              else if (state[head->x/20-1][head->y/20] == 0)
+              {}// moving left
+              else {}//pause,and wait for the user order
+          }
+          else if (oldInput == 'a')      // snake is moving  left
+          {
+              if (state[head->x/20][head->y/20+1] == 0 )
+              {}// moving up
+              else if (state[head->x/20][head->y/20-1] == 0)
+              {}// moving down
+              else if (state[head->x/20-1][head->y/20] == 0)
+              {}// moving left
+              else {}//pause,and wait for the user order
+          }
+          else if (oldInput == 'd')      // snake is moving right
+          {
+              if (state[head->x/20][head->y/20+1] == 0 )
+              {}// moving up
+              else if (state[head->x/20+1][head->y/20] == 0)
+              {}// moving right
+              else if (state[head->x/20][head->y/20-1] == 0)
+              {}// moving down
+              else {}//pause,and wait for the user order
+          }
+          else if (oldInput == 's')      // snake is moving down
+          {
+              if (state[head->x/20+1][head->y/20] == 0)
+              {}// moving right
+              else if (state[head->x/20-1][head->y/20] == 0 )
+              {}// moving left
+              else if (state[head->x/20][head->y/20-1] == 0)
+              {}// moving down
+              else {}//pause,and wait for the user order
+          }
+    }
+//****************************== Situation 3 ==****************************//
+    if (head->x<food_x&&head->y==food_y)       //food is up of the snake
+    {
+          if (oldInput == 'd')      // snake is moving right
+          {
+            if (state[head->x/20+1][head->y/20] == 0)
+            {}// moving right
+            else if (state[head->x/20][head->y/20+1] == 0 )
+            {}// moving up
+            else if (state[head->x/20][head->y/20-1] == 0)
+            {}// moving down
+            else {}//pause,and wait for the user order
+          }
+          else if (oldInput == 'w')      // snake is moving up
+          {
+              if (state[head->x/20+1][head->y/20] == 0)
+              {}// moving right
+              else if (state[head->x/20][head->y/20+1] == 0 )
+              {}// moving up
+              else if (state[head->x/20-1][head->y/20] == 0)
+              {}// moving left
+              else {}//pause,and wait for the user order
+          }
+          else if (oldInput == 'a')      // snake is moving  left
+          {
+              if (state[head->x/20][head->y/20+1] == 0 )
+              {}// moving up
+              else if (state[head->x/20][head->y/20-1] == 0)
+              {}// moving down
+              else if (state[head->x/20-1][head->y/20] == 0)
+              {}// moving left
+              else {}//pause,and wait for the user order
+          }
+        
+          else if (oldInput == 's')      // snake is moving down
+          {
+              if (state[head->x/20+1][head->y/20] == 0)
+              {}// moving right
+              else if (state[head->x/20][head->y/20-1] == 0)
+              {}// moving down
+              else if (state[head->x/20-1][head->y/20] == 0 )
+              {}// moving left
+              else {}//pause,and wait for the user order
+          }
+    }
+  }
 }
- */
