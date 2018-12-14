@@ -7,6 +7,7 @@
 //
 
 #include "smartGrass.h"
+#include "headMove.h"
 #include "main.h"
 #include <graphics.h>
 #include <conio.h>
@@ -18,59 +19,61 @@
 
 extern int food_x,food_y;
 extern int state[33][33];
+extern int smartState;
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
 
 extern char input;
 extern char oldInput;
+extern char smartDirection;
 
 void smartGrass()
 {
-    while(head->x!=food_x && head->y!=food_y)
+    while(smartState == 1)
     {
         //****************************== Situation 1 ==****************************//
         if (head->x==food_x&&head->y<food_y)       //food is up of the snake
         {
             if (oldInput == 'w')      // snake is moving up
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
+                {smartDirection = 'd';headMove();}// moving right
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving  left
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
+                {smartDirection = 'a';headMove();}// moving left
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 2 ==****************************//
@@ -78,43 +81,43 @@ void smartGrass()
         {
             if (oldInput == 'w')      // snake is moving up
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
+                {smartDirection = 'd';headMove();}// moving right
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving  left
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
+                {smartDirection = 'd';headMove();}// moving right
                 else if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 3 ==****************************//
@@ -123,43 +126,43 @@ void smartGrass()
             if (oldInput == 'd')      // snake is moving right
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving  left
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 4 ==****************************//
@@ -168,42 +171,42 @@ void smartGrass()
             if (oldInput == 'd')      // snake is moving right
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving  left
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 5 ==****************************//
@@ -211,43 +214,43 @@ void smartGrass()
         {
             if (oldInput == 's')      // snake is moving down
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
+                {smartDirection = 'd';headMove();}// moving right
                 else if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving left
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
+                {smartDirection = 'd';headMove();}// moving right
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 6 ==****************************//
@@ -255,43 +258,43 @@ void smartGrass()
         {
             if (oldInput == 's')      // snake is moving down
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
+                {smartDirection = 'a';headMove();}// moving left
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'a')      // snake is moving left
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
+                {smartDirection = 'a';headMove();}// moving left
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 7 ==****************************//
@@ -300,42 +303,42 @@ void smartGrass()
             if (oldInput == 'a')      // snake is moving left
             {
                 if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
         }
         //****************************== Situation 8 ==****************************//
@@ -344,42 +347,42 @@ void smartGrass()
             if (oldInput == 'a')      // snake is moving left
             {
                 if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
-                else {}//pause,and wait for the user order
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'w')      // snake is moving up
             {
                 if (state[head->x/20-1][head->y/20] == 0)
-                {}// moving left
-                else if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 's')      // snake is moving down
             {
                 if (state[head->x/20-1][head->y/20] == 0 )
-                {}// moving left
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                {smartDirection = 'a';headMove();}// moving left
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
             else if (oldInput == 'd')      // snake is moving right
             {
-                if (state[head->x/20][head->y/20+1] == 0 )
-                {}// moving up
-                else if (state[head->x/20][head->y/20-1] == 0)
-                {}// moving down
+                if (state[head->x/20][head->y/20-1] == 0 )
+                {smartDirection = 'w';headMove();}// moving up
+                else if (state[head->x/20][head->y/20+1] == 0)
+                {smartDirection = 's';headMove();}// moving down
                 else if (state[head->x/20+1][head->y/20] == 0)
-                {}// moving right
-                else {}//pause,and wait for the user order
+                {smartDirection = 'd';headMove();}// moving right
+                else {break;}//pause,and wait for the user order
             }
         }
     }

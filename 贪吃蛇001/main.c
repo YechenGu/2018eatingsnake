@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <graphics.h>
 #include <conio.h>
@@ -6,6 +5,7 @@
 #include "headMove.h"
 #include "generate.h"
 #include "map1.h"
+#include "smartGrass.h"
 #include "main.h"
 #define Width 640
 #define Height 640
@@ -14,18 +14,21 @@
 
 int poison_x,poison_y;
 int food_x,food_y;
+int smart_x,smart_y;
 int foodState = 1;  //  food remaining
 int poisonState = 1;  // poison remaining
 int bombState = 1;   // bomb remaining
 int snakeCount = 3;
 int preSnakeCount = 3;
 int state[33][33]={0};  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
+int smartState = 0;    // not eat smart grass
 
 
 node *head,*tail,*p1,*p2,*p3,*p;
 node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 char input;
 char oldInput = 'd';
+char smartDirection;
 unsigned long seed = 2;
 int a;
 int score = 400;
@@ -51,10 +54,6 @@ int main()
 labelWelcome:welcome();
     remoteLevel = 1;
     game(1);
-labelGame2:Sleep(300);
-    remoteLevel = 2;
-    game(2);
-labelGameOver:gameOver();
     EndBatchDraw();
     getch();
     closegraph();
@@ -66,7 +65,7 @@ void welcome()    //
     outtextxy(460,310,"Welcome to the world of eating snake,please enter the difficulty you like  ");
     outtextxy(460,330,"1--easy  2--normal  3--hard  4--crazy  5--hell ");
     FlushBatchDraw();
-    difficulty = getch();
+    difficulty = getch()-48;
     cleardevice();
 }
 
@@ -81,12 +80,19 @@ void game(int level)
 {
     startUp();
     
+    if (level == 2)
+    {
+    labelGame2:Sleep(300);
+        remoteLevel = 2;
+    }
+    
+    setfillcolor(BROWN);
     if (level == 1)
     {
         for (a=0; a<loopTime1; a++)      //draw the map wall   >>>
         {
             solidrectangle(map1[a][0]-10,map1[a][1]-10,map1[a][0]+8,map1[a][1]+8);
-            state[map1[a][0]][map1[a][1]] = 4;
+            state[map1[a][0]/20][map1[a][1]/20] = 4;
         }
     }
     else if (level == 2)
@@ -94,7 +100,7 @@ void game(int level)
         for (a=0; a<loopTime2; a++)      //draw the map wall   >>>
         {
             solidrectangle(map2[a][0]-10,map2[a][1]-10,map2[a][0]+8,map2[a][1]+8);
-            state[map2[a][0]][map2[a][1]] = 4;
+            state[map2[a][0]/20][map2[a][1]/20] = 4;
         }
     }
     
@@ -119,14 +125,14 @@ void game(int level)
         headMove();
         
         if (head->x > Width-distance ||head->x < distance || head->y > Height-distance ||head->y < distance )
-            goto labelGameOver;
+            goto labelGameOver;                                                         //GG
         
         if (level == 1)
         {
             for (a = 0; a<loopTime1; a++) {
                 if ((head->x-map1[a][0]<20&&map1[a][0]-head->x<20)&&(head->y-map1[a][1]<20&&map1[a][1]-head->y<20))
                 {
-                    goto labelGameOver;
+                    goto labelGameOver;                                                  //GG
                 }
             }
         }
@@ -136,8 +142,20 @@ void game(int level)
                 if ((head->x-map2[a][0]<20&&map2[a][0]-head->x<20)&&(head->y-map2[a][1]<20&&map2[a][1]-head->y<20))
                 {
                     goto labelGameOver;
-                }
+                }                                                                         //GG
             }
+        }
+        
+        if (smartState == 0 && seed%300 == 0)
+        {
+            generatesmart();
+        }
+        
+        if (smartState == 1)
+        {
+            smartDirection = oldInput;
+            smartGrass();
+            getch();
         }
         
         setcolor(YELLOW);
@@ -156,6 +174,7 @@ void game(int level)
         else if (foodState == 0)
         {
             score += 100;
+            smartState = 0;
             generatefood();
         }
         else if (poisonState == 0)
@@ -188,8 +207,9 @@ void game(int level)
             generatebomb();
         }
         
-        if (level==1&&socre >= 2000)
+        if (level==1&&score >= 2000)
         {
+            level = 2;
             goto labelGame2;
         }
         
@@ -213,14 +233,14 @@ void game(int level)
         if (level == 1) Sleep(240/difficulty);
         else if (level == 2) Sleep(180/difficulty);
         
-        }
         
         preSnakeCount = snakeCount;
         
         seed++;
         
         FlushBatchDraw();
-    
+        }
+        labelGameOver:gameOver();  
 }
 
 

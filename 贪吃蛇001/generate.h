@@ -13,6 +13,7 @@
 void generatefood();
 void generatepoison();
 void generatebomb();
+void generatesmart();
 
 
 

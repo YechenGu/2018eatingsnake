@@ -18,30 +18,31 @@
 
 extern int poison_x,poison_y;
 extern int food_x,food_y;
+extern int smart_x,smart_y;
 extern int foodState;  //  food remaining
 extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
 extern int snakeCount;
 extern int preSnakeCount;
 extern int state[33][33];
-
+extern int smartState;
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
 extern node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 
 extern char input;
 extern char oldInput;
+extern char smartDirection;
 extern unsigned long seed;
-
 
 void headMove()
 {
     p1 = (node *)malloc(sizeof(node));
     //
-    if (kbhit())     // the user touches the keyboard
+    if (kbhit())                             // the user touches the keyboard
     {
+        smartState = 0;
         input = getch();
-        
         if (input == 'a' )
         {
             if (oldInput == 'd')
@@ -99,7 +100,7 @@ void headMove()
             }
         }
         
-        else
+        else                                     //touch other keys
         {
             if (oldInput == 'a' )
             {
@@ -123,7 +124,42 @@ void headMove()
             }
         }
     }
-    else
+    else if (smartState == 1)                  //eat  the smartGrass
+    {
+        switch (smartDirection){
+            case 'w':
+            {
+                p1->x = head->x;
+                p1->y = head->y-distance;
+                oldInput = 'w';
+                break;
+            }
+            case 'a':
+            {
+                p1->x = head->x-distance;
+                p1->y = head->y;
+                oldInput = 'a';
+                break;
+            }
+            case 's':
+            {
+                p1->x = head->x;
+                p1->y = head->y+distance;
+                oldInput = 's';
+                break;
+            }
+            case 'd':
+            {
+                p1->x = head->x+distance;
+                p1->y = head->y;
+                oldInput = 'd';
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    else                                        //not touching keys
     {
         if (oldInput == 'a' )
         {
@@ -152,7 +188,7 @@ void headMove()
     head->previous = p1;
     head = p1;
     state[head->x/20][head ->y/20] = 4;
-    //=========== not deal yet
+    //=========== not dealt yet
     if ((head->x-bombFirst->x<20 && bombFirst->x-head->x<20)&&(head->y-bombFirst->y<20 && bombFirst->y-head->y<20)) {           //eat the bomb
         bombState = 0;
         setcolor(BLACK);
@@ -213,12 +249,19 @@ void headMove()
         snakeCount--;
     }
     
-    if ((head->x-bomb_x<20 && bomb_x-head->x<20)&&(head->y-bomb_y<20 && bomb_y-head->y<20)) {      //eat the food
+    if ((head->x-food_x<20 && food_x-head->x<20)&&(head->y-food_y<20 && food_y-head->y<20)) {      //eat the food
         foodState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(food_x,food_y,radius);
         snakeCount++;
+    }
+    
+    if ((head->x-smart_x<20 && smart_x-head->x<20)&&(head->y-smart_y<20 && smart_y-head->y<20)) {      //eat the smartGrass
+        smartState = 1;
+        setcolor(BLACK);
+        setfillcolor(BLACK);
+        fillcircle(smart_x,smart_y,radius);
     }
     
     

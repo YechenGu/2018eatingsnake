@@ -18,6 +18,7 @@
 
 extern int poison_x,poison_y;
 extern int food_x,food_y;
+extern int smart_x,smart_y;
 extern int foodState;  //  food remaining
 extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
@@ -265,3 +266,32 @@ void generatebomb()
     bombtate = 1;
 }
 
+//*************************************************************************************
+void generatesmart()
+{
+    seed++;
+    srand(seed);
+    if (seed%4 == 0)
+    {
+        smart_x = 20;
+        smart_y = 20;
+    }
+    else if(seed%4 == 1)
+    {
+        smart_x = 620;
+        smart_y = 20;
+    }
+    else if(seed%4 == 2)
+    {
+        smart_x = 20;
+        smart_y = 620;
+    }
+    else if(seed%4 == 3)
+    {
+        smart_x = 620;
+        smart_y = 620;
+    }
+    setcolor(BLUE);
+    setfillcolor(GREY);
+    fillcircle(smart_x,smart_y,radius);
+}
