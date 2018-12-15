@@ -1,9 +1,9 @@
 //
 //  smartGrass.c
-//  贪吃蛇001
+//  Ã∞≥‘…ﬂ001
 //
 //  Created by macos on 2018/12/14.
-//  Copyright © 2018年 macos-gyc. All rights reserved.
+//  Copyright ? 2018ƒÍ macos-gyc. All rights reserved.
 //
 
 #include "smartGrass.h"
@@ -20,6 +20,7 @@
 extern int food_x,food_y;
 extern int state[33][33];
 extern int smartState;
+extern int foodState;
 
 
 extern node *head,*tail,*p1,*p2,*p3,*p;
@@ -27,13 +28,25 @@ extern node *head,*tail,*p1,*p2,*p3,*p;
 extern char input;
 extern char oldInput;
 extern char smartDirection;
+extern int difficulty;
+extern int remoteLevel;
 
 void smartGrass()
 {
-    while(smartState == 1)
+    while(smartState == 1  && foodState == 1)
     {
+        
+        //****************************== Situation 0 ==****************************//
+        if (state[head->x/20][head->y/20-1] == 1 )
+        {smartDirection = 'w';headMove();}// moving up
+        else if (state[head->x/20+1][head->y/20] == 1)
+        {smartDirection = 'd';headMove();}// moving right
+        else if (state[head->x/20-1][head->y/20] == 1)
+        {smartDirection = 'a';headMove();}// moving left
+        else if (state[head->x/20][head->y/20+1] == 1)
+        {smartDirection = 's';headMove();}// moving down
         //****************************== Situation 1 ==****************************//
-        if (head->x==food_x&&head->y<food_y)       //food is up of the snake
+        else if (head->x==food_x&&head->y>food_y)       //food is up of the snake
         {
             if (oldInput == 'w')      // snake is moving up
             {
@@ -77,7 +90,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 2 ==****************************//
-        if (head->x<food_x&&head->y<food_y)       //food is up and right of the snake
+        else if (head->x<food_x&&head->y>food_y)       //food is up and right of the snake
         {
             if (oldInput == 'w')      // snake is moving up
             {
@@ -121,7 +134,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 3 ==****************************//
-        if (head->x<food_x&&head->y==food_y)       //food is right of the snake
+        else if (head->x<food_x&&head->y==food_y)       //food is right of the snake
         {
             if (oldInput == 'd')      // snake is moving right
             {
@@ -166,7 +179,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 4 ==****************************//
-        if (head->x<food_x&&head->y>food_y)       //food is right and down of the snake
+        else if (head->x<food_x&&head->y<food_y)       //food is right and down of the snake
         {
             if (oldInput == 'd')      // snake is moving right
             {
@@ -210,7 +223,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 5 ==****************************//
-        if (head->x==food_x&&head->y>food_y)       //food is down of the snake
+        else if (head->x==food_x&&head->y<food_y)       //food is down of the snake
         {
             if (oldInput == 's')      // snake is moving down
             {
@@ -254,7 +267,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 6 ==****************************//
-        if (head->x>food_x&&head->y>food_y)       //food is left and down of the snake
+        else if (head->x>food_x&&head->y<food_y)       //food is left and down of the snake
         {
             if (oldInput == 's')      // snake is moving down
             {
@@ -298,7 +311,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 7 ==****************************//
-        if (head->x>food_x&&head->y==food_y)       //food is left of the snake
+        else if (head->x>food_x&&head->y==food_y)       //food is left of the snake
         {
             if (oldInput == 'a')      // snake is moving left
             {
@@ -342,7 +355,7 @@ void smartGrass()
             }
         }
         //****************************== Situation 8 ==****************************//
-        if (head->x>food_x&&head->y==food_y)       //food is left and up of the snake
+        else if (head->x>food_x&&head->y>food_y)       //food is left and up of the snake
         {
             if (oldInput == 'a')      // snake is moving left
             {
@@ -385,5 +398,19 @@ void smartGrass()
                 else {break;}//pause,and wait for the user order
             }
         }
+        setcolor(YELLOW);
+        setfillcolor(GREEN);
+        fillcircle(head->x,head->y,radius);
+        if (remoteLevel == 1) Sleep(240/difficulty);
+        else if (remoteLevel == 2) Sleep(180/difficulty);
+        FlushBatchDraw();
     }
+    smartState = 0;
+    setcolor(YELLOW);
+    setfillcolor(GREEN);
+    fillcircle(head->x,head->y,radius);
+    if (remoteLevel == 1) Sleep(240/difficulty);
+    else if (remoteLevel == 2) Sleep(180/difficulty);
+    FlushBatchDraw();
 }
+

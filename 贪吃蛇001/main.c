@@ -20,7 +20,7 @@ int poisonState = 1;  // poison remaining
 int bombState = 1;   // bomb remaining
 int snakeCount = 3;
 int preSnakeCount = 3;
-int state[33][33]={0};  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
+int state[33][33];  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
 int smartState = 0;    // not eat smart grass
 
 
@@ -31,11 +31,11 @@ char oldInput = 'd';
 char smartDirection;
 unsigned long seed = 2;
 int a;
-int score = 400;
+int score = 1600;
 
 void welcome();
 void startUp();
-void game();
+void game(int level);
 void gameOver();
 
 extern int loopTime1;
@@ -43,7 +43,7 @@ extern int map1[2][2];
 extern int loopTime2;
 extern int map2[12][2];
 
-static int difficulty;
+int difficulty;
 int remoteLevel = 1;
 
 //***********************************************************************************************************************
@@ -51,7 +51,7 @@ int main()
 {
     initgraph(960,Height);     //init the canvas
     BeginBatchDraw();
-labelWelcome:welcome();
+    welcome();
     remoteLevel = 1;
     game(1);
     EndBatchDraw();
@@ -62,8 +62,9 @@ labelWelcome:welcome();
 
 void welcome()    //
 {
-    outtextxy(460,310,"Welcome to the world of eating snake,please enter the difficulty you like  ");
-    outtextxy(460,330,"1--easy  2--normal  3--hard  4--crazy  5--hell ");
+    settextcolor(GREEN);
+    outtextxy(200,250,"Welcome  to  the  world  of  eating  snake , please  enter  the  difficulty  you  like  ");
+    outtextxy(310,350,"1--easy   2--normal   3--hard   4--crazy   5--hell ");
     FlushBatchDraw();
     difficulty = getch()-48;
     cleardevice();
@@ -71,20 +72,22 @@ void welcome()    //
 
 void gameOver()
 {
-     cleardevice();
-     outtextxy(460,320,"Oh!!! You have died!!! Press any button to quit");
-     FlushBatchDraw();
+    cleardevice();
+    outtextxy(320,320,"Oh!!! You have died!!! Press any button to quit");
+    FlushBatchDraw();
 }
 
 void game(int level)
 {
-    startUp();
-    
     if (level == 2)
     {
     labelGame2:Sleep(300);
+        cleardevice();
+        smartState = 0;
         remoteLevel = 2;
     }
+    
+    startUp();
     
     setfillcolor(BROWN);
     if (level == 1)
@@ -107,9 +110,11 @@ void game(int level)
     generatepoison();
     generatefood();
     
+    if(level == 2) { FlushBatchDraw();Sleep(500);}
+    
     while(1)
     {
-        if (seed%10 != 0 && seed%10 != 1)
+        if (seed%10 != 0 && seed%10 != 1)                 //blink
         {
             setcolor(GREEN);
             setfillcolor(YELLOW);
@@ -145,22 +150,39 @@ void game(int level)
                 }                                                                         //GG
             }
         }
+        for (p = head->next;p->next != NULL; p = p->next)        //°≠?°›°Æ¶Ã¶∏?®§?°Æo°“
+        {
+            if ((head->x-p->x<20&&p->x-head->x<20)&&(head->y-p->y<20&&p->y-head->y<20))
+            {
+                goto labelGameOver;
+            }
+            
+        }
+        if ((head->x-tail->x<20&&tail->x-head->x<20)&&(head->y-tail->y<20&&tail->y-head->y<20))    //°≠?°›°Æ¶Ã¶∏?®§?°‹°ﬁ?
+        {
+            goto labelGameOver;
+        }
         
-        if (smartState == 0 && seed%300 == 0)
+        
+        setcolor(YELLOW);
+        setfillcolor(GREEN);
+        fillcircle(head->x,head->y,radius);
+        
+        
+        
+        if (smartState == 0 &&  seed%17 == 0)
         {
             generatesmart();
+            smartState = 2;
         }
         
         if (smartState == 1)
         {
             smartDirection = oldInput;
             smartGrass();
-            getch();
         }
         
-        setcolor(YELLOW);
-        setfillcolor(GREEN);
-        fillcircle(head->x,head->y,radius);
+        
         
         if (foodState == 1 && poisonState == 1 && bombState == 1 )
         {
@@ -174,7 +196,8 @@ void game(int level)
         else if (foodState == 0)
         {
             score += 100;
-            smartState = 0;
+            if(smartState == 1)
+            {smartState = 0;}
             generatefood();
         }
         else if (poisonState == 0)
@@ -190,6 +213,10 @@ void game(int level)
             (tail->previous)->next=NULL;
             tail=tail->previous;
             score -= 200;
+            if ( snakeCount<=2)
+            {
+                goto labelGameOver;
+            }
             generatepoison();
         }
         else if (bombState == 0)
@@ -204,6 +231,10 @@ void game(int level)
                 tail=tail->previous;
             }
             score -= 400;
+            if ( snakeCount<=2)
+            {
+                goto labelGameOver;
+            }
             generatebomb();
         }
         
@@ -213,22 +244,6 @@ void game(int level)
             goto labelGame2;
         }
         
-        for (p = head->next;p->next != NULL; p = p->next)        //…ﬂ≥‘µΩ¡À◊‘º∫
-        {
-            if ((head->x-p->x<20&&p->x-head->x<20)&&(head->y-p->y<20&&p->y-head->y<20))
-            {
-                goto labelGameOver;
-            }
-            
-        }
-        if ((head->x-tail->x<20&&tail->x-head->x<20)&&(head->y-tail->y<20&&tail->y-head->y<20))    //…ﬂ≥‘µΩ¡ÀŒ≤∞Õ
-        {
-            goto labelGameOver;
-        }
-        if ( snakeCount<=2)
-        {
-            goto labelGameOver;
-        }
         
         if (level == 1) Sleep(240/difficulty);
         else if (level == 2) Sleep(180/difficulty);
@@ -239,8 +254,11 @@ void game(int level)
         seed++;
         
         FlushBatchDraw();
-        }
-        labelGameOver:gameOver();  
+    }
+labelGameOver:FlushBatchDraw();
+    Sleep(500);
+    settextcolor(RED);
+    gameOver();
 }
 
 
@@ -249,6 +267,13 @@ void startUp()
 {
     setfillcolor(BROWN);                     //draw the boundry wall
     int i;
+    
+    int y,z;
+    for(y=0;y<33;y++)
+    {
+        for(z=0;z<33;z++)
+        {state[y][z] = 0;}
+    }
     for ( i = 0;i <= Height;i += radius)
     {
         solidrectangle(0,i,8,i+8);
@@ -284,6 +309,8 @@ void startUp()
     p3->x=80;
     p3->y=200;
     state[p3->x/20][p3->y/20] = 4;
+    if(remoteLevel == 2 && oldInput == 'a')
+    {p1->x=80;p2->x=100;p3->x=120;}
     p1->next = p2;
     p2->next = p3;
     p3->next = NULL;
@@ -304,6 +331,9 @@ void startUp()
     }
     fillcircle(tail->x,tail->y,radius);
     state[tail->x/20][tail->y/20] = 4;
+    
+    snakeCount = 3;
+    preSnakeCount = 3;
     
     //==================================  draw the init bomb
     
@@ -340,5 +370,4 @@ void startUp()
     fillcircle(bombLast->x,bombLast->y,radius);
     state[bombLast->x/20][bombLast->y/20] = 3;
 }
-
 

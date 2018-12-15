@@ -1,9 +1,9 @@
 //
 //  headMove.c
-//  Ã∞≥‘…ﬂ001
+//  ?°ﬁ°›°Æ°≠?001
 //
 //  Created by macos on 2018/12/10.
-//  Copyright ? 2018ƒÍ macos-gyc. All rights reserved.
+//  Copyright ? 2018?®™ macos-gyc. All rights reserved.
 //
 
 #include "headMove.h"
@@ -41,7 +41,8 @@ void headMove()
     //
     if (kbhit())                             // the user touches the keyboard
     {
-        smartState = 0;
+        if(smartState == 1)
+        {smartState = 0;}
         input = getch();
         if (input == 'a' )
         {
@@ -132,6 +133,12 @@ void headMove()
                 p1->x = head->x;
                 p1->y = head->y-distance;
                 oldInput = 'w';
+                setcolor(BLACK);
+                setfillcolor(BLACK);
+                fillcircle(tail->x,tail->y,radius);
+                state[tail->x/20][tail->y/20] = 0;
+                (tail->previous)->next=NULL;
+                tail=tail->previous;
                 break;
             }
             case 'a':
@@ -139,6 +146,12 @@ void headMove()
                 p1->x = head->x-distance;
                 p1->y = head->y;
                 oldInput = 'a';
+                setcolor(BLACK);
+                setfillcolor(BLACK);
+                fillcircle(tail->x,tail->y,radius);
+                state[tail->x/20][tail->y/20] = 0;
+                (tail->previous)->next=NULL;
+                tail=tail->previous;
                 break;
             }
             case 's':
@@ -146,6 +159,12 @@ void headMove()
                 p1->x = head->x;
                 p1->y = head->y+distance;
                 oldInput = 's';
+                setcolor(BLACK);
+                setfillcolor(BLACK);
+                fillcircle(tail->x,tail->y,radius);
+                state[tail->x/20][tail->y/20] = 0;
+                (tail->previous)->next=NULL;
+                tail=tail->previous;
                 break;
             }
             case 'd':
@@ -153,6 +172,12 @@ void headMove()
                 p1->x = head->x+distance;
                 p1->y = head->y;
                 oldInput = 'd';
+                setcolor(BLACK);
+                setfillcolor(BLACK);
+                fillcircle(tail->x,tail->y,radius);
+                state[tail->x/20][tail->y/20] = 0;
+                (tail->previous)->next=NULL;
+                tail=tail->previous;
                 break;
             }
             default:
@@ -205,7 +230,7 @@ void headMove()
             snakeCount = (snakeCount+1)/2;
         }
     }
-    for (b = bombFirst->next;b->next!=NULL;b=b->next){
+    for (b = bombFirst->next;b->next!=NULL;b=b->next){                //
         if ((head->x-b->x<20 && b->x-head->x<20)&&(head->y-b->y<20 && b->y-head->y<20)) {           //eat the bomb
             bombState = 0;
             setcolor(BLACK);
@@ -224,7 +249,7 @@ void headMove()
         }
     }
     if ((head->x-bombLast->x<20 && bombLast->x-head->x<20)&&(head->y-bombLast->y<20 && bombLast->y-head->y<20)) {           //eat the bomb
-        foodState = 0;
+        bombState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(bombLast->x,bombLast->y,radius);
@@ -257,7 +282,7 @@ void headMove()
         snakeCount++;
     }
     
-    if ((head->x-smart_x<20 && smart_x-head->x<20)&&(head->y-smart_y<20 && smart_y-head->y<20)) {      //eat the smartGrass
+    if (((head->x-smart_x<20 && smart_x-head->x<20)&&(head->y-smart_y<20 && smart_y-head->y<20)) && smartState != 1){      //eat the smartGrass
         smartState = 1;
         setcolor(BLACK);
         setfillcolor(BLACK);
@@ -266,6 +291,5 @@ void headMove()
     
     
 }
-
 
 

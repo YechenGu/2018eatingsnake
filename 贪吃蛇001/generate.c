@@ -255,15 +255,15 @@ void generatebomb()
         seed++;
         generatebomb();
     }
-    bombLast->next = b1;
-    b1->previous = bombLast;
+    (bombLast->previous)->next = b1;
+    b1->previous = (bombLast->previous);
     b1->next = NULL;
     bombLast = b1;
     setcolor(BROWN);
     setfillcolor(RED);
     fillcircle(b1->x,b1->y,radius);
     state[b1->x/20][b1->y/20] = 3;
-    bombtate = 1;
+    bombState = 1;
 }
 
 //*************************************************************************************
@@ -292,6 +292,7 @@ void generatesmart()
         smart_y = 620;
     }
     setcolor(BLUE);
-    setfillcolor(GREY);
+    setfillcolor(WHITE);
     fillcircle(smart_x,smart_y,radius);
 }
+
