@@ -284,6 +284,7 @@ void headMove()
     
     if (((head->x-smart_x<20 && smart_x-head->x<20)&&(head->y-smart_y<20 && smart_y-head->y<20)) && smartState != 1){      //eat the smartGrass
         smartState = 1;
+        state[smart_x/20][smart_y/20] = 4;
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(smart_x,smart_y,radius);

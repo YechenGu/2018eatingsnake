@@ -6,6 +6,7 @@
 #include "generate.h"
 #include "map1.h"
 #include "smartGrass.h"
+#include "rankList.h"
 #include "main.h"
 #define Width 640
 #define Height 640
@@ -15,82 +16,161 @@
 int poison_x,poison_y;
 int food_x,food_y;
 int smart_x,smart_y;
-int foodState = 1;  //  food remaining
-int poisonState = 1;  // poison remaining
-int bombState = 1;   // bomb remaining
+int foodState = 1;  //  依然存在食物
+int poisonState = 1;  // 依然存在毒草
+int bombState = 1;   // 依然存在炸弹
 int snakeCount = 3;
 int preSnakeCount = 3;
-int state[33][33];  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall
-int smartState = 0;    // not eat smart grass
+int state[33][33];  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake or wall  5 -- smartGrass
+int smartState = 0;    // 0--没生成 1--进入智慧模式 2--已经生成还没吃
 
 
 node *head,*tail,*p1,*p2,*p3,*p;
 node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 char input;
 char oldInput = 'd';
-char smartDirection;
+char smartDirection;     //智慧模式下的方向
 unsigned long seed = 2;
 int a;
-int score = 1600;
+int score = 800;
+char s[6];
 
-void welcome();
+void welcomeMain();
+void welcomeN();
+void welcomeS();
 void startUp();
-void game(int level);
+void newGame();
 void gameOver();
 
 extern int loopTime1;
 extern int map1[2][2];
 extern int loopTime2;
 extern int map2[12][2];
+extern int loopTime3;
+extern int map3[129][2];
 
+int gameState = 0;
 int difficulty;
 int remoteLevel = 1;
 
-//***********************************************************************************************************************
+//**********************=== main    函数  ===**********************//
 int main()
 {
-    initgraph(960,Height);     //init the canvas
+    initgraph(960,Height);     // 初始化画布
     BeginBatchDraw();
-    welcome();
-    remoteLevel = 1;
-    game(1);
+labelWelcome:gameState = 0;
+    welcomeMain();
+    if (gameState == 1)         //选择新游戏
+    {
+        remoteLevel = 1;
+        newGame();
+        cleardevice();
+    }
+    else if (gameState == 2）     //选择读档（暂未实现）
+    {
+        
+    }
+    else if (gameState == 3)      //选择查看排行榜
+    {rankListOpen(); goto labelWelcome;}
+    goto labelWelcome;
     EndBatchDraw();
     getch();
     closegraph();
     return 0;
 }
 
-void welcome()    //
+void welcomeN()    //  开始新游戏的初始化界面
 {
     settextcolor(GREEN);
-    outtextxy(200,250,"Welcome  to  the  world  of  eating  snake , please  enter  the  difficulty  you  like  ");
-    outtextxy(310,350,"1--easy   2--normal   3--hard   4--crazy   5--hell ");
+    outtextxy(310,250," please  enter  the  difficulty  you  like  ");
+    outtextxy(260,350," 1 --- Easy   2 --- Normal   3 --- Hard   4 --- Crazy   5 --- Hell ");
     FlushBatchDraw();
     difficulty = getch()-48;
     cleardevice();
 }
 
+void welcomeS()    //  读入旧游戏的初始化界面
+{
+    settextcolor(GREEN);
+    outtextxy(330,250," Welcome back !  ");
+    outtextxy(310,350," Your Game is loading , please wait ");
+    FlushBatchDraw();
+    Sleep(3000);
+    cleardevice();
+}
+
+void welcomeMain()    //  游戏的主初始化界面
+{
+    settextcolor(GREEN);
+    settextstyle(20.0,_T("黑体"));
+    outtextxy(200,100,"Welcome  to  the  world  of  eating  snake , please  choose your ideal mode  ");
+    outtextxy(310,200," n   - - - - - -  New   Game");
+    outtextxy(250,300," s   - - - - - -  Load   A   Saved   Game");
+    outtextxy(250,400," r   - - - - - -  See    The   Ranklist");
+    outtextxy(250,500," q   - - - - - -  Quit   The   Game");
+    FlushBatchDraw();
+    char user_choose = getch();
+    if (user_choose == 'n')
+    {
+        gameState = 1;
+        welcomeN();
+    }
+    else if (user_choose == 's')
+    {
+        gameState = 2;
+        welcomeS();
+    }
+    else if (user_choose == 'r')
+    {
+        gameState = 3;
+    }
+    else if (user_choose == 'q')
+    {
+        exit(0);
+    }
+    cleardevice();
+}
+
+
+
 void gameOver()
 {
     cleardevice();
-    outtextxy(320,320,"Oh!!! You have died!!! Press any button to quit");
+    outtextxy(240,320," Oh !!!  You  have  died  !!!  Press  any  key  to  quit");
     FlushBatchDraw();
 }
 
-void game(int level)
+void newGame()
 {
-    if (level == 2)
+    if (remoteLevel == 1)             //  检测当前属于第几关
+    {}//normal state
+    else if (remoteLevel == 2)
     {
-    labelGame2:Sleep(300);
+    labelGame2:Sleep(1000);
+        cleardevice();
+        settextcolor(GREEN);
+        outtextxy(280,360,"  Cngratulaions !  You  have  passed  level1  !");
+        Sleep(2000);
         cleardevice();
         smartState = 0;
         remoteLevel = 2;
     }
+    else if (remoteLevel == 3)
+    {
+    labelGame3:Sleep(1000);
+        cleardevice();
+        settextcolor(GREEN);
+        outtextxy(280,360,"  Cngratulaions !  You  have  passed  level2  !");
+        Sleep(2000);
+        cleardevice();
+        smartState = 0;
+        remoteLevel = 3;
+    }
     
     startUp();
     
-    setfillcolor(BROWN);
-    if (level == 1)
+    setfillcolor(BROWN);                //  开始画墙
+    if (remoteLevel == 1)
     {
         for (a=0; a<loopTime1; a++)      //draw the map wall   >>>
         {
@@ -98,7 +178,7 @@ void game(int level)
             state[map1[a][0]/20][map1[a][1]/20] = 4;
         }
     }
-    else if (level == 2)
+    else if (remoteLevel == 2)
     {
         for (a=0; a<loopTime2; a++)      //draw the map wall   >>>
         {
@@ -106,15 +186,27 @@ void game(int level)
             state[map2[a][0]/20][map2[a][1]/20] = 4;
         }
     }
+    else if (remoteLevel == 3)
+    {
+        for (a=0; a<loopTime3; a++)      //draw the map wall   >>>
+        {
+            solidrectangle(map3[a][0]-10,map3[a][1]-10,map3[a][0]+8,map3[a][1]+8);
+            state[map3[a][0]/20][map3[a][1]/20] = 4;
+        }
+    }
+        
+    generatepoison();           //生成初始毒草
+    generatefood();             //生成初始食物
     
-    generatepoison();
-    generatefood();
-    
-    if(level == 2) { FlushBatchDraw();Sleep(500);}
-    
+    if(remoteLevel == 2) { FlushBatchDraw();Sleep(2000);}              //  进入第二关的过渡
+     if(remoteLevel == 3) { FlushBatchDraw();Sleep(2000);}              //  进入第三关的过渡
+        
+        settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
+        outtextxy(820,310,"press m to save your game");
+        
     while(1)
     {
-        if (seed%10 != 0 && seed%10 != 1)                 //blink
+        if (seed%10 != 0 && seed%10 != 1)                 // 毒草的闪烁
         {
             setcolor(GREEN);
             setfillcolor(YELLOW);
@@ -130,53 +222,62 @@ void game(int level)
         headMove();
         
         if (head->x > Width-distance ||head->x < distance || head->y > Height-distance ||head->y < distance )
-            goto labelGameOver;                                                         //GG
+            goto labelGameOver;                                                         //撞边缘的墙而死
         
-        if (level == 1)
+        if (remoteLevel == 1)
         {
             for (a = 0; a<loopTime1; a++) {
                 if ((head->x-map1[a][0]<20&&map1[a][0]-head->x<20)&&(head->y-map1[a][1]<20&&map1[a][1]-head->y<20))
                 {
-                    goto labelGameOver;                                                  //GG
+                    goto labelGameOver;                                                  //撞关卡的墙而死
                 }
             }
         }
-        else if (level == 2)
+        else if (remoteLevel == 2)
         {
             for (a = 0; a<loopTime2; a++) {
                 if ((head->x-map2[a][0]<20&&map2[a][0]-head->x<20)&&(head->y-map2[a][1]<20&&map2[a][1]-head->y<20))
                 {
                     goto labelGameOver;
-                }                                                                         //GG
+                }                                                                         //撞关卡的墙而死
             }
         }
-        for (p = head->next;p->next != NULL; p = p->next)        //°≠?°›°Æ¶Ã¶∏?®§?°Æo°“
+        else if (remoteLevel == 3)
+        {
+            for (a = 0; a<loopTime3; a++) {
+                if ((head->x-map3[a][0]<20&&map3[a][0]-head->x<20)&&(head->y-map3[a][1]<20&&map3[a][1]-head->y<20))
+                {
+                    goto labelGameOver;
+                }                                                                         //撞关卡的墙而死
+            }
+        }
+        
+        for (p = head->next;p->next != NULL; p = p->next)
         {
             if ((head->x-p->x<20&&p->x-head->x<20)&&(head->y-p->y<20&&p->y-head->y<20))
             {
-                goto labelGameOver;
+                goto labelGameOver;                                                      //吃到自己而死
             }
             
         }
-        if ((head->x-tail->x<20&&tail->x-head->x<20)&&(head->y-tail->y<20&&tail->y-head->y<20))    //°≠?°›°Æ¶Ã¶∏?®§?°‹°ﬁ?
+        if ((head->x-tail->x<20&&tail->x-head->x<20)&&(head->y-tail->y<20&&tail->y-head->y<20))
         {
-            goto labelGameOver;
+            goto labelGameOver;                                                         //吃到自己尾巴而死
         }
         
         
-        setcolor(YELLOW);
+        setcolor(YELLOW);                           //画出头
         setfillcolor(GREEN);
         fillcircle(head->x,head->y,radius);
         
         
-        
-        if (smartState == 0 &&  seed%17 == 0)
+        if (smartState == 0 &&  seed%317 == 0)          //是否生成智慧草
         {
             generatesmart();
             smartState = 2;
         }
         
-        if (smartState == 1)
+        if (smartState == 1)                            //是否进入智慧模式
         {
             smartDirection = oldInput;
             smartGrass();
@@ -238,25 +339,39 @@ void game(int level)
             generatebomb();
         }
         
-        if (level==1&&score >= 2000)
+        setfillcolor(BLACK);                    //打印分数
+        solidrectangle(800,200,860,230);
+        settextcolor(WHITE);
+        sprintf(s,"%d",score);
+        outtextxy(820,210,s);
+        
+        
+        if (remoteLevel==1&&score >= 2000)              //达到要求，进入第二关
         {
-            level = 2;
+            remoteLevel = 2;
             goto labelGame2;
         }
+        if (remoteLevel==2&&score >= 4000)              //达到要求，进入第二关
+        {
+            remoteLevel = 3;
+            goto labelGame3;
+        }
         
-        
-        if (level == 1) Sleep(240/difficulty);
-        else if (level == 2) Sleep(180/difficulty);
-        
+        if (remoteLevel == 1) Sleep(240/difficulty);
+        else if (remoteLevel == 2) Sleep(180/difficulty);
+        else if (remoteLevel == 3) Sleep(120/difficulty);
         
         preSnakeCount = snakeCount;
         
         seed++;
         
         FlushBatchDraw();
+        
     }
+        
 labelGameOver:FlushBatchDraw();
-    Sleep(500);
+    rankList()；
+    Sleep(2000);
     settextcolor(RED);
     gameOver();
 }
@@ -370,4 +485,7 @@ void startUp()
     fillcircle(bombLast->x,bombLast->y,radius);
     state[bombLast->x/20][bombLast->y/20] = 3;
 }
+
+
+
 

@@ -22,6 +22,7 @@ extern int smart_x,smart_y;
 extern int foodState;  //  food remaining
 extern int poisonState;  // poison remaining
 extern int bombState;   // bomb remaining
+extern int smartState;
 extern int snakeCount;
 extern int preSnakeCount;
 
@@ -36,6 +37,8 @@ extern int map1[2][2];
 extern int loopTime1;
 extern int map2[12][2];
 extern int loopTime2;
+extern int map3[129][2];
+extern int loopTime3;
 extern int remoteLevel;
 extern int state[33][33];
 
@@ -57,7 +60,9 @@ void generatefood()     // not must execute
     {
         food_y = distance;
     }
-    if (remoteLevel == 1) {
+    if  (state[food_x/20][food_y/20] != 0)
+    {seed++; generatefood();}
+    /*if (remoteLevel == 1) {
         for (int a = 0; a<loopTime1; a++)
         {
             if  ((food_x-map1[a][0]<20&&map1[a][0]-food_x<20)&&(food_y-map1[a][1]<20&&map1[a][1]-food_y<20))
@@ -71,6 +76,7 @@ void generatefood()     // not must execute
                 generatefood();
         }
     }
+     if necessary , add descripyions about level3
     
     if ((poison_x-food_x<20&&food_x-poison_x<20)&&(poison_y-food_y<20&&food_y-poison_y<20))
     {
@@ -104,7 +110,7 @@ void generatefood()     // not must execute
     {
         seed++;
         generatefood();
-    }
+    }*/
     setcolor(GREEN);
     setfillcolor(BLUE);
     fillcircle(food_x,food_y,radius);
@@ -129,8 +135,9 @@ void generatepoison()     // not must execute
     {
         poison_y = 20;
     }
-    
-    if (remoteLevel == 1)
+    if (state[poison_x/20][poison_y/20] != 0)
+    {seed++: generatepoison();}
+    /*if (remoteLevel == 1)
     {
         for (int a = 0; a<loopTime1; a++)
         {
@@ -181,7 +188,7 @@ void generatepoison()     // not must execute
     {
         seed++;
         generatepoison();
-    }
+    }*/
     setcolor(GREEN);
     setfillcolor(YELLOW);
     fillcircle(poison_x,poison_y,radius);
@@ -205,8 +212,9 @@ void generatebomb()
     {
         b1->y = 20;
     }
-    
-    if (remoteLevel == 1)
+    if (state[b1->x/20][b1->y/20] != 0)
+    {  seed++; generatebomb();}
+    /*if (remoteLevel == 1)
     {
         for (int a = 0; a<loopTime1; a++)
         {
@@ -254,7 +262,7 @@ void generatebomb()
     {
         seed++;
         generatebomb();
-    }
+    }*/
     (bombLast->previous)->next = b1;
     b1->previous = (bombLast->previous);
     b1->next = NULL;
@@ -271,28 +279,46 @@ void generatesmart()
 {
     seed++;
     srand(seed);
-    if (seed%4 == 0)
+    if (seed%4 == 0  )
     {
-        smart_x = 20;
-        smart_y = 20;
+        if (state[1][1] == 0)
+        {
+            smart_x = 20;
+            smart_y = 20;
+        }
+        else { smartState = 0;}
     }
     else if(seed%4 == 1)
     {
-        smart_x = 620;
-        smart_y = 20;
+        if (state[31][1] == 0)
+        {
+            smart_x = 620;
+            smart_y = 20;
+        }
+        else { smartState = 0;}
     }
     else if(seed%4 == 2)
     {
-        smart_x = 20;
-        smart_y = 620;
+        if (state[1][31] == 0)
+        {
+            smart_x = 20;
+            smart_y = 620;
+        }
+        else { smartState = 0;}
     }
     else if(seed%4 == 3)
     {
-        smart_x = 620;
-        smart_y = 620;
+        if (state[31][31] == 0)
+        {
+            smart_x = 620;
+            smart_y = 620;
+        }
+        else { smartState = 0;}
     }
+    
     setcolor(BLUE);
     setfillcolor(WHITE);
+    state[smart_x/20][smart_y/20] = 5;
     fillcircle(smart_x,smart_y,radius);
 }
 
