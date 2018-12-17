@@ -2,16 +2,40 @@
 
 ###    欢迎来到贪吃蛇世界！
 
-####   现已经更新至2.1版（2018.12.15）
+####   现已经更新至2.2 beta版（2018.12.17）
 
-版本更新日记  
+***更新日记***
 
-* 对代码逻辑进行了优化
-* 修复了智慧草无法运行的bug
-* 修复了炸弹无法生效的bug
-* 优化了用户体验
+* 对代码架构进行了优化
+* 优化了欢迎页面
+* 新增了排行榜功能
+* 新建了第三关地图
 * 优化了场景衔接
 
-> 如果您发现了新的bug或者有好的建议，欢迎来联系我呦！
+> 如果您发现了bug或者有好的建议，欢迎来联系我 ！  
+> E-mail: macosranzar@gmail.com
+
+`printf("Thank you!");`
+
+
+******
+
+
+# 2018eatingsnake
+
+###   Welcome to the world of eating snake!
+
+####   Updated to Version 2.2 beta（2018.12.17）
+
+***Update log***
+
+* transform the structure of the code
+* transform the welcome page
+* add the rankist
+* create a new map of Level3
+* optimize the continuity between scenes
+
+> If you find bugs or have good suggestions , please contact me !  
+> E-mail: macosranzar@gmail.com
 
 `printf("Thank you!");`
