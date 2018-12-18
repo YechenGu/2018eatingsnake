@@ -49,6 +49,7 @@ extern int loopTime2;
 extern int map2[12][2];
 extern int loopTime3;
 extern int map3[130][2];
+extern int loadStatus = 0;              //暂时还没有存档
 
 int gameState = 0;
 int difficulty;

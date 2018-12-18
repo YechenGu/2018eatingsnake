@@ -4,7 +4,7 @@
 //
 //  Created by macos on 2018/12/17.
 //  Copyright © 2018年 macos-gyc. All rights reserved.
-//
+//  改变了rradius的值，有一点小方
 
 #include "rankList.h"
 #include "smartGrass.h"

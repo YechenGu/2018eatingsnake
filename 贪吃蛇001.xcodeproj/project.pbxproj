@@ -12,6 +12,7 @@
 		22D1DAD621BE46260063F791 /* generate.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DAD521BE46260063F791 /* generate.c */; };
 		22D1DAD921BE48B40063F791 /* headMove.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DAD821BE48B40063F791 /* headMove.c */; };
 		22D1DAE021BE4CDD0063F791 /* map1.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D1DADF21BE4CDD0063F791 /* map1.c */; };
+		22D6BBBA21C8FA570042B65D /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D6BBB921C8FA570042B65D /* load.c */; };
 		22D9A16E21C79B030035C11D /* rankList.c in Sources */ = {isa = PBXBuildFile; fileRef = 22D9A16D21C79B030035C11D /* rankList.c */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,8 @@
 		22D1DAD821BE48B40063F791 /* headMove.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = headMove.c; sourceTree = "<group>"; };
 		22D1DADE21BE4CDD0063F791 /* map1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = map1.h; sourceTree = "<group>"; };
 		22D1DADF21BE4CDD0063F791 /* map1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = map1.c; sourceTree = "<group>"; };
+		22D6BBB821C8FA570042B65D /* load.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = load.h; sourceTree = "<group>"; };
+		22D6BBB921C8FA570042B65D /* load.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = load.c; sourceTree = "<group>"; };
 		22D9A16C21C79B030035C11D /* rankList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rankList.h; sourceTree = "<group>"; };
 		22D9A16D21C79B030035C11D /* rankList.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = rankList.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,6 +78,8 @@
 			children = (
 				22BCF69E21C0CE580041F600 /* main.h */,
 				226F97B921B8206F00B14D2E /* main.c */,
+				22D6BBB821C8FA570042B65D /* load.h */,
+				22D6BBB921C8FA570042B65D /* load.c */,
 				229CDAD721C3B4DB00FF7CEA /* smartGrass.h */,
 				229CDAD821C3B4DB00FF7CEA /* smartGrass.c */,
 				22D1DADE21BE4CDD0063F791 /* map1.h */,
@@ -151,6 +156,7 @@
 				22D9A16E21C79B030035C11D /* rankList.c in Sources */,
 				22D1DAE021BE4CDD0063F791 /* map1.c in Sources */,
 				22D1DAD921BE48B40063F791 /* headMove.c in Sources */,
+				22D6BBBA21C8FA570042B65D /* load.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
