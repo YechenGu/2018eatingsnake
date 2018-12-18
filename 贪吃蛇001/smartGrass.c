@@ -15,7 +15,7 @@
 #define Width 640
 #define Height 640
 #define distance 20
-#define radius 10
+#define radius 9
 
 extern int food_x,food_y;
 extern int state[33][33];

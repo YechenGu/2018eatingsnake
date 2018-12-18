@@ -2,7 +2,7 @@
 #include <graphics.h>
 #include <conio.h>
 #include <stdlib.h>
-#include "headMove.h"
+#include "headMove.h"   //暂时更换了头文件名字
 #include "generate.h"
 #include "map1.h"
 #include "smartGrass.h"
@@ -11,7 +11,8 @@
 #define Width 640
 #define Height 640
 #define distance 20
-#define radius 10
+#define radius 9
+#define initScore 800
 
 int poison_x,poison_y;
 int food_x,food_y;
@@ -32,7 +33,7 @@ char oldInput = 'd';
 char smartDirection;     //智慧模式下的方向
 unsigned long seed = 2;
 int a;
-int score = 800;
+int score = initScore;
 char s[6];
 
 void welcomeMain();
@@ -47,7 +48,7 @@ extern int map1[2][2];
 extern int loopTime2;
 extern int map2[12][2];
 extern int loopTime3;
-extern int map3[129][2];
+extern int map3[130][2];
 
 int gameState = 0;
 int difficulty;
@@ -66,7 +67,7 @@ labelWelcome:gameState = 0;
         newGame();
         cleardevice();
     }
-    else if (gameState == 2）     //选择读档（暂未实现）
+    else if (gameState == 2)     // 选择读档（暂未实现）
     {
         
     }
@@ -82,6 +83,9 @@ labelWelcome:gameState = 0;
 void welcomeN()    //  开始新游戏的初始化界面
 {
     settextcolor(GREEN);
+    remoteLevel = 1;
+    score = initScore;
+    oldInput = 'd';
     outtextxy(310,250," please  enter  the  difficulty  you  like  ");
     outtextxy(260,350," 1 --- Easy   2 --- Normal   3 --- Hard   4 --- Crazy   5 --- Hell ");
     FlushBatchDraw();
@@ -95,34 +99,37 @@ void welcomeS()    //  读入旧游戏的初始化界面
     outtextxy(330,250," Welcome back !  ");
     outtextxy(310,350," Your Game is loading , please wait ");
     FlushBatchDraw();
-    Sleep(3000);
+    Sleep(2000);
     cleardevice();
 }
 
 void welcomeMain()    //  游戏的主初始化界面
 {
     settextcolor(GREEN);
-    settextstyle(20.0,_T("黑体"));
-    outtextxy(200,100,"Welcome  to  the  world  of  eating  snake , please  choose your ideal mode  ");
-    outtextxy(310,200," n   - - - - - -  New   Game");
-    outtextxy(250,300," s   - - - - - -  Load   A   Saved   Game");
-    outtextxy(250,400," r   - - - - - -  See    The   Ranklist");
-    outtextxy(250,500," q   - - - - - -  Quit   The   Game");
+    settextstyle(16, 0, _T("宋体"));
+    outtextxy(170,100,"Welcome  to  the  world  of  eating  snake , please  choose  your  ideal  mode  ");
+    outtextxy(300,200," n   - - - - - -  New                Game");
+    outtextxy(300,300," s   - - - - - -  Load      Old      Game");
+    outtextxy(300,400," r   - - - - - -  See       The      Rank");
+    outtextxy(300,500," q   - - - - - -  Quit      The      Game");
     FlushBatchDraw();
     char user_choose = getch();
     if (user_choose == 'n')
     {
         gameState = 1;
+        cleardevice();
         welcomeN();
     }
     else if (user_choose == 's')
     {
         gameState = 2;
+        cleardevice();
         welcomeS();
     }
     else if (user_choose == 'r')
     {
         gameState = 3;
+        
     }
     else if (user_choose == 'q')
     {
@@ -138,6 +145,8 @@ void gameOver()
     cleardevice();
     outtextxy(240,320," Oh !!!  You  have  died  !!!  Press  any  key  to  quit");
     FlushBatchDraw();
+    Sleep(1000);
+    getch();
 }
 
 void newGame()
@@ -146,10 +155,11 @@ void newGame()
     {}//normal state
     else if (remoteLevel == 2)
     {
-    labelGame2:Sleep(1000);
+    labelGame2:Sleep(300);
         cleardevice();
         settextcolor(GREEN);
-        outtextxy(280,360,"  Cngratulaions !  You  have  passed  level1  !");
+        outtextxy(300,320,"  Cngratulaions !  You  have  passed  level1  !");
+        FlushBatchDraw();
         Sleep(2000);
         cleardevice();
         smartState = 0;
@@ -157,10 +167,11 @@ void newGame()
     }
     else if (remoteLevel == 3)
     {
-    labelGame3:Sleep(1000);
+    labelGame3:Sleep(300);
         cleardevice();
         settextcolor(GREEN);
-        outtextxy(280,360,"  Cngratulaions !  You  have  passed  level2  !");
+        outtextxy(300,320,"  Cngratulaions !  You  have  passed  level2  !");
+        FlushBatchDraw();
         Sleep(2000);
         cleardevice();
         smartState = 0;
@@ -194,16 +205,16 @@ void newGame()
             state[map3[a][0]/20][map3[a][1]/20] = 4;
         }
     }
-        
+    
     generatepoison();           //生成初始毒草
     generatefood();             //生成初始食物
     
-    if(remoteLevel == 2) { FlushBatchDraw();Sleep(2000);}              //  进入第二关的过渡
-     if(remoteLevel == 3) { FlushBatchDraw();Sleep(2000);}              //  进入第三关的过渡
-        
-        settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
-        outtextxy(820,310,"press m to save your game");
-        
+    if(remoteLevel == 2) { FlushBatchDraw();Sleep(500);}              //  进入第二关的过渡
+    if(remoteLevel == 3) { FlushBatchDraw();Sleep(500);}              //  进入第三关的过渡
+    
+    settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
+    outtextxy(720,310,"press m to save your game");
+    
     while(1)
     {
         if (seed%10 != 0 && seed%10 != 1)                 // 毒草的闪烁
@@ -346,16 +357,17 @@ void newGame()
         outtextxy(820,210,s);
         
         
+        if (remoteLevel==2&&score >= 3000)              //达到要求，进入第三关
+        {
+            remoteLevel = 3;
+            goto labelGame3;
+        }
         if (remoteLevel==1&&score >= 2000)              //达到要求，进入第二关
         {
             remoteLevel = 2;
             goto labelGame2;
         }
-        if (remoteLevel==2&&score >= 4000)              //达到要求，进入第二关
-        {
-            remoteLevel = 3;
-            goto labelGame3;
-        }
+        
         
         if (remoteLevel == 1) Sleep(240/difficulty);
         else if (remoteLevel == 2) Sleep(180/difficulty);
@@ -368,9 +380,9 @@ void newGame()
         FlushBatchDraw();
         
     }
-        
+    
 labelGameOver:FlushBatchDraw();
-    rankList()；
+    rankList();
     Sleep(2000);
     settextcolor(RED);
     gameOver();
@@ -424,8 +436,7 @@ void startUp()
     p3->x=80;
     p3->y=200;
     state[p3->x/20][p3->y/20] = 4;
-    if(remoteLevel == 2 && oldInput == 'a')
-    {p1->x=80;p2->x=100;p3->x=120;}
+    oldInput = 'd';
     p1->next = p2;
     p2->next = p3;
     p3->next = NULL;
@@ -485,7 +496,4 @@ void startUp()
     fillcircle(bombLast->x,bombLast->y,radius);
     state[bombLast->x/20][bombLast->y/20] = 3;
 }
-
-
-
 

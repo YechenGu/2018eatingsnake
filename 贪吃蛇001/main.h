@@ -9,14 +9,7 @@
 #ifndef main_h
 #define main_h
 
-#include <stdio.h>
-#include <graphics.h>
-#include <conio.h>
-#include <stdlib.h>
-#define Width 640
-#define Height 640
-#define distance 20
-#define radius 10
+
 struct node
 {
     int x;

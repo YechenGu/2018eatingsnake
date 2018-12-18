@@ -14,7 +14,7 @@
 #define Width 640
 #define Height 640
 #define distance 20
-#define radius 10
+#define radius 9
 
 extern int poison_x,poison_y;
 extern int food_x,food_y;
