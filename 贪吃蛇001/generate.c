@@ -62,62 +62,14 @@ void generatefood()     // not must execute
     }
     if  (state[food_x/20][food_y/20] != 0)
     {seed++; generatefood();}
-    /*if (remoteLevel == 1) {
-        for (int a = 0; a<loopTime1; a++)
-        {
-            if  ((food_x-map1[a][0]<20&&map1[a][0]-food_x<20)&&(food_y-map1[a][1]<20&&map1[a][1]-food_y<20))
-                generatefood();
-        }
-    }
-    else if (remoteLevel == 2) {
-        for (int a = 0; a<loopTime2; a++)
-        {
-            if  ((food_x-map2[a][0]<20&&map2[a][0]-food_x<20)&&(food_y-map2[a][1]<20&&map2[a][1]-food_y<20))
-                generatefood();
-        }
-    }
-     if necessary , add descripyions about level3
-    
-    if ((poison_x-food_x<20&&food_x-poison_x<20)&&(poison_y-food_y<20&&food_y-poison_y<20))
-    {
-        seed++;
-        generatefood();
-    }
-    for (p = head;p ->next != NULL ; p = p->next )
-    {
-        if ((p->x-food_x<20&&food_x-p->x<20)&&(p->y-food_y<20&&food_y-p->y<20))
-        {
-            seed++;
-            generatefood();
-        }
-    }
-    if ((tail->x-food_x<20&&food_x-tail->x<20)&&(tail->y-food_y<20&&food_y-tail->y<20))
-    {
-        seed++;
-        generatefood();
-    }
-    
-    for (b = bombFirst;b ->next != NULL ; b = b->next )
-    {
-        
-        if ((b->x-food_x<20&&food_x-b->x<20)&&(b->y-food_y<20&&food_y-b->y<20))
-        {
-            seed++;
-            generatefood();
-        }
-    }
-    if ((bombLast->x-food_x<20&&food_x-bombLast->x<20)&&(bombLast->y-food_y<20&&food_y-bombLast->y<20))
-    {
-        seed++;
-        generatefood();
-    }*/
     setcolor(GREEN);
     setfillcolor(BLUE);
     fillcircle(food_x,food_y,radius);
     state[food_x/20][food_y/20] = 1;
     foodState = 1;
 }
-//*********************************************************************************************************************************************************************************
+
+
 
 void generatepoison()     // not must execute
 {
@@ -137,58 +89,6 @@ void generatepoison()     // not must execute
     }
     if (state[poison_x/20][poison_y/20] != 0)
     {seed++: generatepoison();}
-    /*if (remoteLevel == 1)
-    {
-        for (int a = 0; a<loopTime1; a++)
-        {
-            if  ((poison_x-map1[a][0]<20&&map1[a][0]-poison_x<20)&&(poison_y-map1[a][1]<20&&map1[a][1]-poison_y<20))
-                generatepoison();
-        }
-    }
-    else if (remoteLevel == 2)
-    {
-        for (int a = 0; a<loopTime2; a++)
-        {
-            if  ((poison_x-map2[a][0]<20&&map2[a][0]-poison_x<20)&&(poison_y-map2[a][1]<20&&map2[a][1]-poison_y<20))
-                generatepoison();
-        }
-    }
-    
-    if ((poison_x-food_x<20&&food_x-poison_x<20)&&(poison_y-food_y<20&&food_y-poison_y<20))
-    {
-        seed++;
-        generatepoison();
-    }
-    
-    for (p = head;p ->next != NULL ; p = p->next )
-    {
-        
-        if ((p->x-poison_x<20&&poison_x-p->x<20)&&(p->y-poison_y<20&&poison_y-p->y<20))
-        {
-            seed++;
-            generatepoison();
-        }
-    }
-    if ((tail->x-poison_x<20&&poison_x-tail->x<20)&&(tail->y-poison_y<20&&poison_y-tail->y<20))
-    {
-        seed++;
-        generatepoison();
-    }
-    
-    for (b = bombFirst;b ->next != NULL ; b = b->next )
-    {
-        
-        if ((b->x-poison_x<20&&poison_x-b->x<20)&&(b->y-poison_y<20&&poison_y-b->y<20))
-        {
-            seed++;
-            generatepoison();
-        }
-    }
-    if ((bombLast->x-poison_x<20&&poison_x-bombLast->x<20)&&(bombLast->y-poison_y<20&&poison_y-bombLast->y<20))
-    {
-        seed++;
-        generatepoison();
-    }*/
     setcolor(GREEN);
     setfillcolor(YELLOW);
     fillcircle(poison_x,poison_y,radius);
@@ -196,7 +96,8 @@ void generatepoison()     // not must execute
     poisonState = 1;
 }
 
-//**********************************************************************************************************************************************************************************
+
+
 void generatebomb()
 {
     b1 = (node *)malloc(sizeof(node));

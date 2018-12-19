@@ -8,6 +8,7 @@
 
 #include "headMove.h"
 #include "main.h"
+#include "load.h"
 #include <graphics.h>
 #include <conio.h>
 #include <stdlib.h>
@@ -33,6 +34,7 @@ extern node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
 extern char input;
 extern char oldInput;
 extern char smartDirection;
+extern int loadStatus;              // 存档状态
 extern unsigned long seed;
 
 void headMove()
@@ -44,7 +46,16 @@ void headMove()
         if(smartState == 1)
         {smartState = 0;}
         input = getch();
-        if (input == 'a' )
+        if (input == 'm' )
+        {
+            loadIn();
+            loadStatus = 1;
+            setfillcolor(BLACK);
+            solidrectangle(700,300,900,360);
+            settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
+            outtextxy(720,310,"Your game has been saved");
+        }
+        else if (input == 'a' )
         {
             if (oldInput == 'd')
             {

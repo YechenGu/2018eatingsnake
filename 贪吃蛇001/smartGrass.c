@@ -401,16 +401,18 @@ void smartGrass()
         setcolor(YELLOW);
         setfillcolor(GREEN);
         fillcircle(head->x,head->y,radius);
-        if (remoteLevel == 1) Sleep(240/difficulty);
+        if (remoteLevel == 1) Sleep(210/difficulty);
         else if (remoteLevel == 2) Sleep(180/difficulty);
+        else if (remoteLevel == 2) Sleep(150/difficulty);
         FlushBatchDraw();
     }
     smartState = 0;
     setcolor(YELLOW);
     setfillcolor(GREEN);
     fillcircle(head->x,head->y,radius);
-    if (remoteLevel == 1) Sleep(240/difficulty);
+    if (remoteLevel == 1) Sleep(210/difficulty);
     else if (remoteLevel == 2) Sleep(180/difficulty);
+    else if (remoteLevel == 3) Sleep(150/difficulty);
     FlushBatchDraw();
 }
 

@@ -4,7 +4,7 @@
 //
 //  Created by macos on 2018/12/17.
 //  Copyright © 2018年 macos-gyc. All rights reserved.
-//  改变了rradius的值，有一点小方
+//  改变了radius的值，有一点小方
 
 #include "rankList.h"
 #include "smartGrass.h"
@@ -13,6 +13,7 @@
 #include <graphics.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #define Width 640
 #define Height 640
 #define distance 20
@@ -23,7 +24,7 @@ static int rank[5];
 void rankList()
 {
     FILE *fp;
-    fp = fopen(".\\rank.txt", "r");                 //从文件读入，文件格式可以改变
+    fp = fopen(".\\rank.txt", "r");                 //从文件读出，文件格式可以改变
     fscanf(fp,"%d %d %d %d %d",&rank[0],&rank[1],&rank[2],&rank[3],&rank[4]);
     fclose(fp);
     int point,k,transmit,n;  //本次分数，计数变量，中转量，超过的量
@@ -56,7 +57,7 @@ void rankListOpen()
     FILE * fp;
     char sr[6];
     int e;
-    fp = fopen(".\\rank.txt", "r");                 //从文件读入，文件格式可以改变
+    fp = fopen(".\\rank.txt", "r");                 //从文件读出，文件格式可以改变
     fscanf(fp,"%d %d %d %d %d",&rank[0],&rank[1],&rank[2],&rank[3],&rank[4]);
     fclose(fp);
     settextstyle(30, 0, _T("宋体"));
