@@ -14,10 +14,6 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define Width 640
-#define Height 640
-#define distance 20
-#define radius 9
 extern int score;
 static int rank[5];
 //统计排行榜，判断玩家是否能够进入排行榜

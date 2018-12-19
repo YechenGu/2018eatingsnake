@@ -7,17 +7,9 @@
 //
 
 #include "load.h"
-#include "rankList.h"
-#include "smartGrass.h"
-#include "headMove.h"
 #include "main.h"
 #include <graphics.h>
-#include <conio.h>
 #include <stdlib.h>
-#define Width 640
-#define Height 640
-#define distance 20
-#define radius 9
 
 //**************=== 引用外部游戏需要被保存的数据 ===**************//
 extern int score;

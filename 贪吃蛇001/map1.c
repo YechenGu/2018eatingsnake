@@ -8,13 +8,7 @@
 
 #include "map1.h"
 #include <stdio.h>
-#include <graphics.h>
-#include <conio.h>
 #include <stdlib.h>
-#define Width 640
-#define Height 640
-#define distance 20
-#define radius 9
 
 int m;
 

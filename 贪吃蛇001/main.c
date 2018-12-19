@@ -64,8 +64,7 @@ int main()
 {
     initgraph(960,Height);     // 初始化画布
     BeginBatchDraw();
-labelWelcome:gameState = 0;
-    welcomeMain();
+labelWelcome:welcomeMain();
     if (gameState == 1)         //选择新游戏
     {
         remoteLevel = 1;
@@ -78,7 +77,7 @@ labelWelcome:gameState = 0;
          {loadOut();}
         else                    //如果没有存档的话，就进行提示
         {
-           outtextxy(310,310," 暂   时   没   有   存   档 ！  ");
+           outtextxy(310,310," 暂   时   没   有   存   档   ！ ");
            FlushBatchDraw();
            Sleep(1000);
            cleardevice();
@@ -252,7 +251,7 @@ void Game()
     
     while(1)                                              // 在初始化之后，进入游戏的响应事件循环
     {
-        if (seed%10 != 0 && seed%10 != 1)                 // 控制毒草是否闪烁，整除0，1就变黑，不能整除就照样显示
+        if (seed%10 != 0 && seed%10 != 1)                 // 控制毒草是否闪烁，整除10，或者余1就变黑，不能整除就照样显示
         {
             setcolor(GREEN);
             setfillcolor(YELLOW);
@@ -390,16 +389,18 @@ void Game()
         outtextxy(820,210,s);
         
         
-        if (remoteLevel==2&&score >= 3000)              //达到要求，进入第三关
+        if (remoteLevel==2&&score >= 3000)              //达到要求，升级进入第三关
         {
             remoteLevel = 3;
             smartState = 0;
+            gameState = 1;
             goto labelGame3;
         }
-        if (remoteLevel==1&&score >= 2000)              //达到要求，进入第二关
+        if (remoteLevel==1&&score >= 2000)              //达到要求，升级进入第二关
         {
             remoteLevel = 2;
             smartState = 0;
+            gameState = 1;
             goto labelGame2;
         }
         
