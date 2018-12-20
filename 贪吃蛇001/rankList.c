@@ -21,7 +21,7 @@ void rankList()
 {
     FILE *fp;
     fp = fopen(".\\rank.txt", "r");                 //从文件读出，文件格式可以改变
-    fscanf(fp,"%d %d %d %d %d",&rank[0],&rank[1],&rank[2],&rank[3],&rank[4]);
+    fscanf(fp,"%d %d %d %d %d",&rank[0],&rank[1],&rank[2],&rank[3],&rank[4]);   //后面的参数是接受文件数值的地址
     fclose(fp);
     int point,k,transmit,n;  //本次分数，计数变量，中转量，超过的量
     point = score;
@@ -42,7 +42,7 @@ void rankList()
         }
         
         fp = fopen(".\\rank.txt", "w");                     //向文件写入
-        fprintf(fp,"%d %d %d %d %d",rank[0],rank[1],rank[2],rank[3],rank[4]);
+        fprintf(fp,"%d %d %d %d %d",rank[0],rank[1],rank[2],rank[3],rank[4]);   //后面参数用于代表向文件写入的数值
         fclose(fp);
     }
 }

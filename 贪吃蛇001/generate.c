@@ -100,6 +100,8 @@ void generatepoison()     // not must execute
 
 void generatebomb()
 {
+    seed++;
+    srand(seed);
     b1 = (node *)malloc(sizeof(node));
     b1->x=rand()%(Width-20)+10;
     b1->x-=(b1->x%20);
@@ -164,8 +166,8 @@ void generatebomb()
         seed++;
         generatebomb();
     }*/
-    (bombLast->previous)->next = b1;
-    b1->previous = (bombLast->previous);
+    bombLast->next = b1;
+    b1->previous = bombLast;
     b1->next = NULL;
     bombLast = b1;
     setcolor(BROWN);
