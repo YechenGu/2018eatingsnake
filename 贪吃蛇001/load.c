@@ -6,10 +6,22 @@
 //  Copyright © 2018年 macos-gyc. All rights reserved.
 //
 
-#include "load.h"
-#include "main.h"
+#include <stdio.h>
+#include <conio.h>
 #include <graphics.h>
 #include <stdlib.h>
+#include "load.h"
+#include "main.h"
+#include "headMove.h"
+#include "generate.h"
+#include "map1.h"
+#include "smartGrass.h"
+#include "rankList.h"
+#define Width 640
+#define Height 640
+#define distance 20
+#define radius 9
+#define initScore 800
 
 //**************=== 引用外部游戏需要被保存的数据 ===**************//
 extern int score;
@@ -48,12 +60,12 @@ int smartStateLoad;    // 0--没生成 1--进入智慧模式 2--已经生成还�
 int difficultyLoad;
 int remoteLevelLoad;
 
-node *headLoad,*tailLoad,*p,*p2,*p3;
-node *bombFirstLoad,*bombLastLoad,*b,*b2;
+node *headLoad,*tailLoad,*p4,*p5,*p6;
+node *bombFirstLoad,*bombLastLoad,*b4,*b5;
 char oldInputLoad;
 char smartDirectionLoad;     //智慧模式下的方向
 unsigned long seedLoad;
-int a;
+static int a;
 
 
 void loadIn()                   //存入数据
@@ -83,41 +95,57 @@ void loadIn()                   //存入数据
         }
     }
     
-//     保存蛇的身体
-    headLoad = head;
-    for (p=head->next,p3=headLoad; p->next!=NULL; p=p->next,p3=p3->next)    //从头之后一节直到倒数第二节
+    //     保存蛇的身体
+    headLoad = (node *)malloc(sizeof(node));
+    headLoad->x = head->x;
+    headLoad->y = head->y;
+    headLoad->previous = NULL;
+    headLoad->next = NULL;
+    p4 = (node *)malloc(sizeof(node));      //用来读取main的头
+    p6 = (node *)malloc(sizeof(node));      //用来存取存档的头
+    p4=head->next;                          //获得main文件里面头之后的一个节点
+    for (p6=headLoad; p4->next!=NULL; p4=p4->next,p6=p6->next)    //从头之后一节直到倒数第二节
     {
-        p2 = (node *)malloc(sizeof(node));
-        p2->previous = p3;
-        p2->next=NULL;
-        p2->x=p->x;
-        p2->y=p->y;
-        p3->next=p2;
+        p5 = (node *)malloc(sizeof(node));
+        p5->x = p4->x;
+        p5->y = p4->y;
+        p5->previous = p6;
+        p5->next=NULL;
+        p6->next=p5;
     }
+    tailLoad = (node *)malloc(sizeof(node));
     tailLoad->x = tail->x;
     tailLoad->y = tail->y;
-    tailLoad->previous = p2;
+    tailLoad->previous = p5;
     tailLoad->next = NULL;
-    p2->next = tailLoad;
+    p5->next = tailLoad;
     
-//    保存炸弹
-    bombFirstLoad = bombFirst;
-    b2->previous = bombFirstLoad;
-    b2->next = NULL;
-    b2->x = (bombFirst->next)->x;
-    b2->y = (bombFirst->next)->y;
-    bombFirstLoad->next = b2;
-    bombLastLoad->previous = b2;
+    //    保存炸弹
+    bombFirstLoad = (node *)malloc(sizeof(node));
+    bombFirstLoad->x = bombFirst->x;
+    bombFirstLoad->y = bombFirst->y;
+    bombFirstLoad->previous = NULL;
+    bombFirstLoad->next = NULL;
+    b5 = (node *)malloc(sizeof(node));
+    b5->previous = bombFirstLoad;
+    b5->next = NULL;
+    b5->x = (bombFirst->next)->x;
+    b5->y = (bombFirst->next)->y;
+    bombFirstLoad->next = b5;
+    bombLastLoad = (node *)malloc(sizeof(node));
+    bombLastLoad->previous = b5;
     bombLastLoad->next = NULL;
     bombLastLoad->x = bombLast->x;
     bombLastLoad->y = bombLast->y;
-    b2->next = bombLastLoad;
+    b5->next = bombLastLoad;
     
     
     oldInputLoad = oldInput;
     smartDirectionLoad = smartDirection;
     seedLoad = seed;
-    fprintf(fp,"%d %d %d %d %d %d %d %d %d %d %d" "%d" "%d",scoreLoad,food_xLoad,food_yLoad,poison_xLoad,poison_yLoad,smart_xLoad,smart_yLoad,foodStateLoad,poisonStateLoad,bombStateLoad,snakeCountLoad,difficultyLoad,remoteLevelLoad);
+    fprintf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d",scoreLoad,food_xLoad,food_yLoad,poison_xLoad,poison_yLoad,smart_xLoad,smart_yLoad,foodStateLoad,poisonStateLoad,bombStateLoad,snakeCountLoad,difficultyLoad,remoteLevelLoad);
+    fclose(fp);
+    fp = fopen(".\\load.txt", "a");    //向txt文件追加
     for (i=0; i<33; i++)
     {
         for (j=0; j<33; j++)
@@ -126,8 +154,8 @@ void loadIn()                   //存入数据
         }
     }
     fwrite(&headLoad,sizeof(headLoad),1,fp);
-    for (p=headLoad; p->next!=NULL; p=p->next)
-    {fwrite(&p->next,sizeof(p->next),1,fp);}
+    for (p4=headLoad; p4->next!=NULL; p4=p4->next)     
+    {fwrite(&p4->next,sizeof(p4->next),1,fp);}
     fwrite(&bombFirstLoad,sizeof(bombFirstLoad),1,fp);
     fwrite(&(bombFirstLoad->next),sizeof(bombFirstLoad->next),1,fp);
     fwrite(&bombLastLoad,sizeof(bombLastLoad),1,fp);
@@ -144,7 +172,7 @@ void loadOut()
     fp = fopen(".\\load.txt", "r");     //从文件读出
     //**************=== 开始读取数据 ===**************//
     int i,j;
-    fscanf(fp,"%d %d %d %d %d %d %d %d %d %d %d" "%d" "%d",&scoreLoad,&food_xLoad,&food_yLoad,&poison_xLoad,&poison_yLoad,&smart_xLoad,&smart_yLoad,&foodStateLoad,&poisonStateLoad,&bombStateLoad,&snakeCountLoad,&difficultyLoad,&remoteLevelLoad);
+    fscanf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d",&scoreLoad,&food_xLoad,&food_yLoad,&poison_xLoad,&poison_yLoad,&smart_xLoad,&smart_yLoad,&foodStateLoad,&poisonStateLoad,&bombStateLoad,&snakeCountLoad,&difficultyLoad,&remoteLevelLoad);
     for (i=0; i<33; i++)
     {
         for (j=0; j<33; j++)
@@ -152,9 +180,10 @@ void loadOut()
             fscanf(fp, "%d",&stateLoad[i][j]);
         }
     }
+    
     fread(&headLoad,sizeof(headLoad),1,fp);
-    for (p=headLoad; p->next!=NULL; p=p->next)
-    {fread(&p->next,sizeof(p->next),1,fp);}
+    for (p4=headLoad; p4->next!=NULL; p4=p4->next)
+    {p4 = (node *)malloc(sizeof(node));fread(&p4->next,sizeof(p4->next),1,fp);}
     fread(&bombFirstLoad,sizeof(bombFirstLoad),1,fp);
     fread(&(bombFirstLoad->next),sizeof(bombFirstLoad->next),1,fp);
     fread(&bombLastLoad,sizeof(bombLastLoad),1,fp);
@@ -186,34 +215,44 @@ void loadOut()
     }
     
     //     读出蛇的身体
-    head = headLoad;
-    for (p=headLoad->next,p3=head; p->next!=NULL; p=p->next,p3=p3->next)    //从头之后一节直到倒数第二节
+    head->x = headLoad->x;
+    head->y = headLoad->y;
+    head->previous=NULL;
+    head->next=NULL;
+    p6 = (node *)malloc(sizeof(node));
+    for (p4=headLoad->next,p6=head; p4->next!=NULL; p4=p4->next,p6=p6->next)    //从头之后一节直到倒数第二节
     {
-        p2 = (node *)malloc(sizeof(node));
-        p2->previous = p3;
-        p2->next=NULL;
-        p2->x=p->x;
-        p2->y=p->y;
-        p3->next=p2;
+        p5 = (node *)malloc(sizeof(node));
+        p5->previous = p6;
+        p5->next=NULL;
+        p5->x=p4->x;
+        p5->y=p4->y;
+        p6->next=p5;
     }
     tail->x = tailLoad->x;
     tail->y = tailLoad->y;
-    tail->previous = p2;
+    tail->previous = p5;
     tail->next = NULL;
-    p2->next = tail;
+    p5->next = tail;
     
     //    读出炸弹
-    bombFirst = bombFirstLoad;
-    b2->previous = bombFirst;
-    b2->next = NULL;
-    b2->x = (bombFirstLoad->next)->x;
-    b2->y = (bombFirstLoad->next)->y;
-    bombFirst->next = b2;
-    bombLast->previous = b2;
+    bombFirstLoad = (node *)malloc(sizeof(node));
+    b5 = (node *)malloc(sizeof(node));
+    bombLastLoad = (node *)malloc(sizeof(node));
+    bombFirst->x = bombFirstLoad->x;
+    bombFirst->y = bombFirstLoad->y;
+    bombFirst->previous = NULL;
+    bombFirst->next = NULL;
+    b5->previous = bombFirst;
+    b5->next = NULL;
+    b5->x = (bombFirstLoad->next)->x;
+    b5->y = (bombFirstLoad->next)->y;
+    bombFirst->next = b5;
+    bombLast->previous = b5;
     bombLast->next = NULL;
     bombLast->x = bombLastLoad->x;
     bombLast->y = bombLastLoad->y;
-    b2->next = bombLast;
+    b5->next = bombLast;
     
     
     oldInput = oldInputLoad;

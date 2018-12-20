@@ -74,14 +74,14 @@ labelWelcome:welcomeMain();
     else if (gameState == 2)     // 选择读档（暂未实现）
     {
         if   (loadStatus == 1)
-         {loadOut();}
+        {loadOut();}
         else                    //如果没有存档的话，就进行提示
         {
-           outtextxy(310,310," 暂   时   没   有   存   档   ！ ");
-           FlushBatchDraw();
-           Sleep(1000);
-           cleardevice();
-           goto labelWelcome;
+            outtextxy(310,310," 暂   时   没   有   存   档   ！ ");
+            FlushBatchDraw();
+            Sleep(1000);
+            cleardevice();
+            goto labelWelcome;
         }
         Game();
         cleardevice();
@@ -127,7 +127,7 @@ void welcomeS()    //  读入旧游戏的初始化界面
 
 void welcomeMain()    //  游戏的主初始化界面
 {
-    settextcolor(GREEN);
+labelInit:    settextcolor(GREEN);
     settextstyle(16, 0, _T("宋体"));
     outtextxy(160,100,"Welcome  to  the  world  of  Eating  Snake  !  Please  choose  your  ideal  mode  ");
     outtextxy(300,190," N   - - - - - -  New                Game");
@@ -155,12 +155,13 @@ void welcomeMain()    //  游戏的主初始化界面
     }
     else if (user_choose == 'g')
     {
+        cleardevice();
         outtextxy(300,100," 绿   色   的   是   聪   明   的   小   蛇");
         outtextxy(300,200," 蓝   色   的   是   美   味   的   食   物");
         outtextxy(300,300," 黄   色   的   是   有   毒   的   毒   草");
         outtextxy(300,400," 红   色   的   是   烈   性   的   炸   药");
-        outtextxy(280,500," 白 色 的 是 智 慧 草 , 也 可 以 敲 击 键 盘 退 出 智 慧 模 式");
-        outtextxy(300,600," 按   任   意   键   退   出");
+        outtextxy(220,500," 白 色 的 是 智 慧 草 , 也 可 以 敲 击 键 盘 退 出 智 慧 模 式");
+        outtextxy(330,600," 按   任   意   键   退   出");
         FlushBatchDraw();
         getch();
         gameState = 4;
@@ -168,6 +169,15 @@ void welcomeMain()    //  游戏的主初始化界面
     else if (user_choose == 'q')
     {
         exit(0);
+    }
+    else
+    {
+        cleardevice();
+        outtextxy(320,300,"  请      重      新      输      入");
+        FlushBatchDraw();
+        Sleep(1000);
+        cleardevice();
+        goto labelInit;
     }
     cleardevice();
 }
@@ -316,7 +326,7 @@ void Game()
         fillcircle(head->x,head->y,radius);
         
         
-        if (smartState == 0 &&  seed%317 == 0)          //是否生成智慧草
+        if (smartState == 0 &&  seed%317 == 0。&& remoteLevel<=2)          //是否生成智慧草
         {
             generatesmart();
             smartState = 2;
@@ -426,6 +436,7 @@ labelGameOver:FlushBatchDraw();
 
 //*****************************=== 恢复旧游戏 ===*****************************//
 void oldStartUp()
+{
     setfillcolor(BROWN);                                             //画出地图周围的墙
     int i;
     int y,z;

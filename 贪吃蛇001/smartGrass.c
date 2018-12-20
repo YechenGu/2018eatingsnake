@@ -26,12 +26,25 @@ extern char oldInput;
 extern char smartDirection;
 extern int difficulty;
 extern int remoteLevel;
+extern int seed;
 
 void smartGrass()
 {
     while(smartState == 1  && foodState == 1)
     {
-        
+        seed++;
+        if (seed%10 != 0 && seed%10 != 1)                 // 控制毒草是否闪烁，整除10，或者余1就变黑，不能整除就照样显示
+        {
+            setcolor(GREEN);
+            setfillcolor(YELLOW);
+            fillcircle(poison_x,poison_y,radius);
+        }
+        else
+        {
+            setcolor(BLACK);
+            setfillcolor(BLACK);
+            fillcircle(poison_x,poison_y,radius);
+        }
         //****************************== Situation 0 ==****************************//
         if (state[head->x/20][head->y/20-1] == 1 )
         {smartDirection = 'w';headMove();}// moving up
