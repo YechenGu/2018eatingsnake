@@ -88,7 +88,7 @@ void generatepoison()     // not must execute
         poison_y = 20;
     }
     if (state[poison_x/20][poison_y/20] != 0)
-    {seed++: generatepoison();}
+    {seed++; generatepoison();}
     setcolor(GREEN);
     setfillcolor(YELLOW);
     fillcircle(poison_x,poison_y,radius);

@@ -10,7 +10,7 @@
 #define smartGrass_h
 
 #include <stdio.h>
-
+void smartGrass();
 #endif /* smartGrass_h */
 
-void smartGrass();
+

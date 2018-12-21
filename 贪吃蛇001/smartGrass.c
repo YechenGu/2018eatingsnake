@@ -12,8 +12,10 @@
 #include <graphics.h>
 #include <conio.h>
 #include <stdlib.h>
+#define radius 9
 
 extern int food_x,food_y;
+extern int poison_x,poison_y;
 extern int state[33][33];
 extern int smartState;
 extern int foodState;
@@ -26,7 +28,7 @@ extern char oldInput;
 extern char smartDirection;
 extern int difficulty;
 extern int remoteLevel;
-extern int seed;
+extern unsigned long seed;
 
 void smartGrass()
 {

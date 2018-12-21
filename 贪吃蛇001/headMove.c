@@ -55,7 +55,7 @@ void headMove()
             settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
             outtextxy(720,310,"Your game has been saved");
         }
-        else if (input == 'a' )
+        if (input == 'a' )
         {
             if (oldInput == 'd')
             {

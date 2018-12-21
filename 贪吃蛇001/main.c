@@ -326,7 +326,7 @@ void Game()
         fillcircle(head->x,head->y,radius);
         
         
-        if (smartState == 0 &&  seed%317 == 0。&& remoteLevel<=2)          //是否生成智慧草
+        if (smartState == 0 &&  seed%317 == 0 && remoteLevel<=2)          //是否生成智慧草
         {
             generatesmart();
             smartState = 2;
@@ -345,7 +345,7 @@ void Game()
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(tail->x,tail->y,radius);
-            state[tail->x/20][tail->y/20] = 0;
+            state[tail->x/20][tail->y/20] = 0;      //tail->x显示异常
             (tail->previous)->next=NULL;
             tail=tail->previous;
         }
