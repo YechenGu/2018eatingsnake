@@ -64,12 +64,12 @@ void loadIn()                   //存入数据
             fprintf(fp, "%d",state[i][j]);
         }
     }
-    fwrite(&head,sizeof(head),1,fp);
-    for (p4=head; p4->next!=NULL; p4=p4->next)
-    {fwrite(&p4->next,sizeof(p4->next),1,fp);}          //fwrite似乎只能存储地址，无法保存成员属性
-    fwrite(&bombFirst,sizeof(bombFirst),1,fp);
-    fwrite(&(bombFirst->next),sizeof(bombFirst->next),1,fp);
-    fwrite(&bombLast,sizeof(bombLast),1,fp);
+    fprintf(fp, "%d %d ",head->x,head->y);
+    for (p4=head->next; p4!=NULL; p4=p4->next)
+    {fprintf(fp, "%d %d ",p4->x,p4->y);}          //fwrite似乎只能存储地址，无法保存成员属性
+    fprintf(fp, "%d %d ",bombFirst->x,bombFirst->y);
+    fprintf(fp, "%d %d ",(bombFirst->next)->x,(bombFirst->next)->y);
+    fprintf(fp, "%d %d ",bombLast->x,bombLast->y);
     fprintf(fp, "%c %c",oldInput,smartDirection);
     fprintf(fp, "%lu",seed);
     fclose(fp);
@@ -84,6 +84,7 @@ void loadOut()
     //**************=== 开始读取数据 ===**************//
     int i,j;
     fscanf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d",&score,&food_x,&food_y,&poison_x,&poison_y,&smart_x,&smart_y,&foodState,&poisonState,&bombState, &snakeCount,&difficulty,&remoteLevel);
+    
     fseek(fp, 0L, SEEK_CUR);
     for (i=0; i<33; i++)
     {
@@ -93,39 +94,49 @@ void loadOut()
             fscanf(fp, "%d",&state[i][j]);
         }
     }
+    
     fseek(fp, 0L, SEEK_CUR);
-    fread(&head,sizeof(head),1,fp);             //fread似乎只能读出地址，读不出成员属性
+    head = (node *)malloc(sizeof(node));
+    fscanf(fp, "%d %d ",&head->x,&head->y);
+    head->previous = NULL;
+    head->next = NULL;
     p4 = (node *)malloc(sizeof(node));
     p6 = (node *)malloc(sizeof(node));
-    for (p4=head,p6=head->next; p6->next!=NULL; p4=p4->next,p6=p6->next)  //p4代表将要返回main函数的节点
+    for (i = 0,p4=head; i<snakeCount-2; i++,p4=p4->next)
     {
         fseek(fp, 0L, SEEK_CUR);
         p6 = (node *)malloc(sizeof(node));
-        fread(&p6,sizeof(p6),1,fp);
         p4->next = p6;
         p6->previous = p4;
+        p6->next = NULL;
+        fscanf(fp, "%d %d ",&p6->x,&p6->y);
     }
     fseek(fp, 0L, SEEK_CUR);
-    fread(&tail,sizeof(tail),1,fp);
-    tail->previous = p6;
-    tail->next = NULL;
+    p5 = (node *)malloc(sizeof(node));
+    p6->next = p5;
+    p5->previous = p6;
+    p5->next = NULL;
+    fscanf(fp, "%d %d ",&p5->x,&p5->y);
+    tail = p5;
+    
     
     fseek(fp, 0L, SEEK_CUR);
-    fread(&bombFirst,sizeof(bombFirst),1,fp);
-    fseek(fp, 0L, SEEK_CUR);
+    bombFirst = (node *)malloc(sizeof(node));
+    fscanf(fp, "%d %d ",&bombFirst->x,&bombFirst->y);
+    bombFirst->previous = NULL;bombFirst->next=NULL;
+    
     b4 = (node *)malloc(sizeof(node));
-    fread(&b4,sizeof(b4),1,fp);
-    bombFirst->next=b4;
-    b4->previous=bombFirst;
     fseek(fp, 0L, SEEK_CUR);
-    fread(&bombLast,sizeof(bombLast),1,fp);
+    b4->previous = bombFirst;
+    b4->next=NULL;
+    fscanf(fp, "%d %d ",&b4->x,&b4->y);
+    
+    fseek(fp, 0L, SEEK_CUR);
+    bombLast = (node *)malloc(sizeof(node));
+    b4->next=bombLast;
     bombLast->previous = b4;
-    b4->next = bombLast;
-    b4->next = NULL;
-    fseek(fp, 0L, SEEK_CUR);
-    fscanf(fp, "%c %c",&oldInputLoad,&smartDirectionLoad);
-    fseek(fp, 0L, SEEK_CUR);
-    fscanf(fp, "ul",&seedLoad);
+    bombLast->next = NULL;
+    fscanf(fp, "%d %d ",&bombLast->x,&bombLast->y);
     loadStatus = 1;
     fclose(fp);
 }

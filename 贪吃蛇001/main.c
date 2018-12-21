@@ -118,8 +118,8 @@ labelInvalidInput:difficulty = getch()-48;
 void welcomeS()    //  读入旧游戏的初始化界面
 {
     settextcolor(GREEN);
-    outtextxy(330,250," Welcome back !  ");
-    outtextxy(310,350," Your Game is loading , please wait ");
+    outtextxy(380,250," 欢   迎   回   来  ");
+    outtextxy(370,350," 加       载        中 ");
     FlushBatchDraw();
     Sleep(2000);
     cleardevice();
@@ -127,14 +127,16 @@ void welcomeS()    //  读入旧游戏的初始化界面
 
 void welcomeMain()    //  游戏的主初始化界面
 {
-labelInit:    settextcolor(GREEN);
+labelInit:    settextcolor(BLUE);
+    settextstyle(30, 0, _T("宋体"));
+    outtextxy(460,70,"贪    吃    蛇");
     settextstyle(16, 0, _T("宋体"));
-    outtextxy(160,100,"Welcome  to  the  world  of  Eating  Snake  !  Please  choose  your  ideal  mode  ");
-    outtextxy(300,190," N   - - - - - -  New                Game");
-    outtextxy(300,280," L   - - - - - -  Load      Old      Game");
-    outtextxy(300,370," R   - - - - - -  See       The      Rank");
-    outtextxy(300,460," G   - - - - - -  Read      The      Guide");
-    outtextxy(300,550," Q   - - - - - -  Quit      The      Game");
+    settextcolor(GREEN);
+    outtextxy(320,200," N    键   - - - - - -  新    游   戏");
+    outtextxy(300,300," L    键   - - - - - -  加  载  存  档 ");
+    outtextxy(300,400," R    键   - - - - - -  排    行   榜");
+    outtextxy(300,500," G    键   - - - - - -  游  戏  说  明 ");
+    outtextxy(300,600," Q    键   - - - - - -  退  出  游  戏 ");
     FlushBatchDraw();
     char user_choose = getch();
     if (user_choose == 'n')
@@ -187,7 +189,7 @@ labelInit:    settextcolor(GREEN);
 void gameOver()
 {
     cleardevice();
-    outtextxy(240,320," Oh !!!  You  have  died  !!!  Press  any  key  to  quit");
+    outtextxy(240,320," 你   挂   了   ！   按   任   意   键   退   出");
     FlushBatchDraw();
     Sleep(1000);
     getch();
@@ -204,7 +206,7 @@ void Game()
     labelGame2:Sleep(300);
         cleardevice();
         settextcolor(GREEN);
-        outtextxy(300,320,"  Cngratulaions !  You  have  passed  level1  !");
+        outtextxy(300,320,"恭    喜   !   你    通   过   了   第   一   关  !");
         FlushBatchDraw();
         Sleep(2000);
         cleardevice();
@@ -214,7 +216,7 @@ void Game()
     labelGame3:Sleep(300);
         cleardevice();
         settextcolor(GREEN);
-        outtextxy(300,320,"  Cngratulaions !  You  have  passed  level2  !");
+        outtextxy(300,320,"恭    喜   !   你    通   过   了   第   二   关  !");
         FlushBatchDraw();
         Sleep(2000);
         cleardevice();
@@ -255,7 +257,7 @@ void Game()
     if(remoteLevel == 3) { FlushBatchDraw();Sleep(500);}              //  进入第三关的过渡
     
     settextcolor(WHITE);                                 //提示玩家存档的操作
-    outtextxy(720,310,"press m to save your game");
+    outtextxy(720,310,"按 M 键 保 存 游 戏);
     outtextxy(720,210,"当前分数:");
     
     
@@ -463,14 +465,12 @@ void oldStartUp()
     
     setcolor(YELLOW);
     setfillcolor(GREEN);
-    for (p = head;p ->next != NULL ; p = p->next )
+    for (p = head;p != NULL ; p = p->next )
     {fillcircle(p->x,p->y,radius);}
-    fillcircle(tail->x,tail->y,radius);
     setcolor(BROWN);
     setfillcolor(RED);
-    for (b = bombFirst;b ->next != NULL ;b = b->next )
+    for (b = bombFirst;b != NULL ;b = b->next )
     {fillcircle(b->x,b->y,radius);}
-    fillcircle(bombLast->x,bombLast->y,radius);
     setcolor(GREEN);
     setfillcolor(YELLOW);
     fillcircle(poison_x,poison_y,radius);
