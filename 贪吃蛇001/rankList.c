@@ -14,6 +14,7 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <stdio.h>
+#pragma comment(lib,"winmm.lib")
 extern int score;
 static int rank[5];
 //统计排行榜，判断玩家是否能够进入排行榜
@@ -68,10 +69,13 @@ void rankListOpen()
         sprintf(sr,"%d",rank[e]);
         outtextxy(500,90*(e+1),sr);
     }
-    outtextxy(280,560," press any key to return ");
+    outtextxy(280,560," 输 入 任 意 键 返 回 ");
     FlushBatchDraw();
+    mciSendString("close dingdongmusic",NULL,0,NULL);
+    mciSendString("open .\\dingdong.mp3 alias dingdongmusic",NULL,0,NULL);
+    mciSendString("play dingdongmusic",NULL,0,NULL);
+    Sleep(3000);
     getch();
     cleardevice();
 }
-
 

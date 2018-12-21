@@ -53,7 +53,7 @@ void headMove()
             setfillcolor(BLACK);
             solidrectangle(700,300,950,360);
             settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
-            outtextxy(720,310,"Your game has been saved");
+            outtextxy(720,310,"游 戏 已 经 保 存");
         }
         if (input == 'a' )
         {
@@ -220,13 +220,16 @@ void headMove()
     }
     //
     p1->previous = NULL;
-    p1 ->next = head;
+    p1->next = head;
     head->previous = p1;
     head = p1;
-    state[head->x/20][head ->y/20] = 4;
+    state[head->x/20][head->y/20] = 4;
     //=========== not dealt yet
     if ((head->x-bombFirst->x<20 && bombFirst->x-head->x<20)&&(head->y-bombFirst->y<20 && bombFirst->y-head->y<20)) {           //eat the bomb
         bombState = 0;
+        mciSendString("close bombmusic",NULL,0,NULL);
+        mciSendString("open .\\bomb.mp3 alias bombmusic",NULL,0,NULL);
+        mciSendString("play bombmusic",NULL,0,NULL);
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(bombFirst->x,bombFirst->y,radius);
@@ -244,6 +247,9 @@ void headMove()
     for (b = bombFirst->next;b->next!=NULL;b=b->next){                //
         if ((head->x-b->x<20 && b->x-head->x<20)&&(head->y-b->y<20 && b->y-head->y<20)) {           //eat the bomb
             bombState = 0;
+            mciSendString("close bombmusic",NULL,0,NULL);
+            mciSendString("open .\\bomb.mp3 alias bombmusic",NULL,0,NULL);
+            mciSendString("play bombmusic",NULL,0,NULL);
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(b->x,b->y,radius);
@@ -261,6 +267,9 @@ void headMove()
     }
     if ((head->x-bombLast->x<20 && bombLast->x-head->x<20)&&(head->y-bombLast->y<20 && bombLast->y-head->y<20)) {           //eat the bomb
         bombState = 0;
+        mciSendString("close bombmusic",NULL,0,NULL);
+        mciSendString("open .\\bomb.mp3 alias bombmusic",NULL,0,NULL);
+        mciSendString("play bombmusic",NULL,0,NULL);
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(bombLast->x,bombLast->y,radius);
@@ -279,6 +288,9 @@ void headMove()
     
     if ((head->x-poison_x<20 && poison_x-head->x<20)&&(head->y-poison_y<20 && poison_y-head->y<20)) {      //eat the poison
         poisonState = 0;
+        mciSendString("close poisonmusic",NULL,0,NULL);
+        mciSendString("open .\\poison.mp3 alias poisonmusic",NULL,0,NULL);
+        mciSendString("play poisonmusic",NULL,0,NULL);
         setcolor(BLACK);
         setfillcolor(BLACK);
         fillcircle(poison_x,poison_y,radius);
@@ -286,6 +298,9 @@ void headMove()
     }
     
     if ((head->x-food_x<20 && food_x-head->x<20)&&(head->y-food_y<20 && food_y-head->y<20)) {      //eat the food
+        mciSendString("close scoremusic",NULL,0,NULL);
+        mciSendString("open .\\score.mp3 alias scoremusic",NULL,0,NULL);
+        mciSendString("play scoremusic",NULL,0,NULL);
         foodState = 0;
         setcolor(BLACK);
         setfillcolor(BLACK);
@@ -303,5 +318,4 @@ void headMove()
     
     
 }
-
 

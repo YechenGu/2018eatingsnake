@@ -43,8 +43,8 @@ extern int state[33][33];
 
 //**************=== 数据存储变量 ===**************//
 
-node *headLoad,*tailLoad,*p4,*p5,*p6;
-node *bombFirstLoad,*bombLastLoad,*b4,*b5;
+node *p4,*p5,*p6;
+node *b4,*b5;
 
 static int a;
 
@@ -54,14 +54,16 @@ void loadIn()                   //存入数据
     fp = fopen(".\\load.txt", "w");    //向txt文件写入
     int i,j;
     p4 = (node *)malloc(sizeof(node));      //用来读取main的头
-    fprintf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d",score,food_x,food_y,poison_x,poison_y,smart_x,smart_y,foodState,poisonState,bombState,snakeCount,difficulty,remoteLevel);
+    loadStatus = 1;
+    fprintf(fp, "%d ",loadStatus);
+    fprintf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d ",score,food_x,food_y,poison_x,poison_y,smart_x,smart_y,foodState,poisonState,bombState,snakeCount,difficulty,remoteLevel);
     fclose(fp);
     fp = fopen(".\\load.txt", "a");    //向txt文件追加
     for (i=0; i<33; i++)
     {
         for (j=0; j<33; j++)
         {
-            fprintf(fp, "%d",state[i][j]);
+            fprintf(fp, "%d ",state[i][j]);
         }
     }
     fprintf(fp, "%d %d ",head->x,head->y);
@@ -70,8 +72,8 @@ void loadIn()                   //存入数据
     fprintf(fp, "%d %d ",bombFirst->x,bombFirst->y);
     fprintf(fp, "%d %d ",(bombFirst->next)->x,(bombFirst->next)->y);
     fprintf(fp, "%d %d ",bombLast->x,bombLast->y);
-    fprintf(fp, "%c %c",oldInput,smartDirection);
-    fprintf(fp, "%lu",seed);
+    fprintf(fp, "%c %c ",oldInput,smartDirection);
+    fprintf(fp, "%lu ",seed);
     fclose(fp);
 }
 
@@ -83,15 +85,15 @@ void loadOut()
     fp = fopen(".\\load.txt", "r");     //从文件读出
     //**************=== 开始读取数据 ===**************//
     int i,j;
-    fscanf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d",&score,&food_x,&food_y,&poison_x,&poison_y,&smart_x,&smart_y,&foodState,&poisonState,&bombState, &snakeCount,&difficulty,&remoteLevel);
-    
+    fscanf(fp, "%d ",&loadStatus);
     fseek(fp, 0L, SEEK_CUR);
+    fscanf(fp,"%d %d %d %d %d %d %d %d %d %d %d %d %d ",&score,&food_x,&food_y,&poison_x,&poison_y,&smart_x,&smart_y,&foodState,&poisonState,&bombState, &snakeCount,&difficulty,&remoteLevel);
     for (i=0; i<33; i++)
     {
         for (j=0; j<33; j++)
         {
             fseek(fp, 0L, SEEK_CUR);
-            fscanf(fp, "%d",&state[i][j]);
+            fscanf(fp, "%d ",&state[i][j]);
         }
     }
     
@@ -123,20 +125,25 @@ void loadOut()
     fseek(fp, 0L, SEEK_CUR);
     bombFirst = (node *)malloc(sizeof(node));
     fscanf(fp, "%d %d ",&bombFirst->x,&bombFirst->y);
-    bombFirst->previous = NULL;bombFirst->next=NULL;
+    bombFirst->previous = NULL;
+    bombFirst->next = NULL;
     
-    b4 = (node *)malloc(sizeof(node));
     fseek(fp, 0L, SEEK_CUR);
+    b4 = (node *)malloc(sizeof(node));
     b4->previous = bombFirst;
     b4->next=NULL;
+    bombFirst->next = b4;
     fscanf(fp, "%d %d ",&b4->x,&b4->y);
     
     fseek(fp, 0L, SEEK_CUR);
     bombLast = (node *)malloc(sizeof(node));
-    b4->next=bombLast;
+    b4->next = bombLast;
     bombLast->previous = b4;
     bombLast->next = NULL;
     fscanf(fp, "%d %d ",&bombLast->x,&bombLast->y);
-    loadStatus = 1;
+    fseek(fp, 0L, SEEK_CUR);
+    fscanf(fp, "%c %c ",&oldInput,&smartDirection);
+    fseek(fp, 0L, SEEK_CUR);
+    fscanf(fp, "%lu ",&seed);
     fclose(fp);
 }

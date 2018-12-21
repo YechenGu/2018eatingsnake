@@ -14,6 +14,7 @@
 #define distance 20
 #define radius 9
 #define initScore 800
+#pragma comment(lib,"winmm.lib")
 
 //设计UI界面，完成用户登陆系统
 
@@ -53,7 +54,7 @@ extern int loopTime2;
 extern int map2[12][2];
 extern int loopTime3;
 extern int map3[131][2];
-extern int loadStatus = 0;              // 暂时还没有存档
+int loadStatus;
 
 int gameState = 0;
 int difficulty;
@@ -64,6 +65,8 @@ int main()
 {
     initgraph(960,Height);     // 初始化画布
     BeginBatchDraw();
+    mciSendString("open .\\battle1.mp3 alias bkmusic",NULL,0,NULL);
+    mciSendString("play bkmusic repeat",NULL,0,NULL);
 labelWelcome:welcomeMain();
     if (gameState == 1)         //选择新游戏
     {
@@ -71,8 +74,12 @@ labelWelcome:welcomeMain();
         Game();
         cleardevice();
     }
-    else if (gameState == 2)     // 选择读档（暂未实现）
+    else if (gameState == 2)     // 选择读档
     {
+        FILE *fp;
+        fp = fopen(".\\load.txt", "r");     //从文件读出
+        fscanf(fp, "%d",&loadStatus);
+        fclose(fp);
         if   (loadStatus == 1)
         {loadOut();}
         else                    //如果没有存档的话，就进行提示
@@ -87,7 +94,10 @@ labelWelcome:welcomeMain();
         cleardevice();
     }
     else if (gameState == 3)      //选择查看排行榜
-    {rankListOpen(); goto labelWelcome;}
+    {
+        rankListOpen();
+        goto labelWelcome;
+    }
     else if (gameState == 4)      //选择查看说明书
     {cleardevice(); goto labelWelcome;}
     goto labelWelcome;
@@ -103,8 +113,10 @@ void welcomeN()                     //  开始新游戏的初始化界面
     remoteLevel = 1;
     score = initScore;
     oldInput = 'd';
-    outtextxy(310,250," Please  enter  the  difficulty  you  like  ");
-    outtextxy(320,350," 1 --- Easy   2 --- Normal   3 --- Hard   ");
+    settextstyle(18, 0, _T("宋体"));
+    outtextxy(350,200," 请     选      择     难     度  ");
+    outtextxy(220,360," 1 ----- 简  单          2 ----- 中  等          3 ----- 困  难   ");
+    settextstyle(16, 0, _T("宋体"));
     FlushBatchDraw();
 labelInvalidInput:difficulty = getch()-48;
     if (difficulty<1 || difficulty >3)      //在难度选择无效的情况下提示错误信息
@@ -118,8 +130,8 @@ labelInvalidInput:difficulty = getch()-48;
 void welcomeS()    //  读入旧游戏的初始化界面
 {
     settextcolor(GREEN);
-    outtextxy(380,250," 欢   迎   回   来  ");
-    outtextxy(370,350," 加       载        中 ");
+    outtextxy(430,250," 欢   迎   回   来  ");
+    outtextxy(400,350," 加       载        中 ");
     FlushBatchDraw();
     Sleep(2000);
     cleardevice();
@@ -128,11 +140,11 @@ void welcomeS()    //  读入旧游戏的初始化界面
 void welcomeMain()    //  游戏的主初始化界面
 {
 labelInit:    settextcolor(BLUE);
-    settextstyle(30, 0, _T("宋体"));
-    outtextxy(460,70,"贪    吃    蛇");
+    settextstyle(32, 0, _T("宋体"));
+    outtextxy(350,70,"贪    吃    蛇");
     settextstyle(16, 0, _T("宋体"));
     settextcolor(GREEN);
-    outtextxy(320,200," N    键   - - - - - -  新    游   戏");
+    outtextxy(300,200," N    键   - - - - - -  新    游   戏");
     outtextxy(300,300," L    键   - - - - - -  加  载  存  档 ");
     outtextxy(300,400," R    键   - - - - - -  排    行   榜");
     outtextxy(300,500," G    键   - - - - - -  游  戏  说  明 ");
@@ -165,6 +177,10 @@ labelInit:    settextcolor(BLUE);
         outtextxy(220,500," 白 色 的 是 智 慧 草 , 也 可 以 敲 击 键 盘 退 出 智 慧 模 式");
         outtextxy(330,600," 按   任   意   键   退   出");
         FlushBatchDraw();
+        mciSendString("close dingdongmusic",NULL,0,NULL);
+        mciSendString("open .\\dingdong.mp3 alias dingdongmusic",NULL,0,NULL);
+        mciSendString("play dingdongmusic",NULL,0,NULL);
+        Sleep(3000);
         getch();
         gameState = 4;
     }
@@ -191,7 +207,7 @@ void gameOver()
     cleardevice();
     outtextxy(240,320," 你   挂   了   ！   按   任   意   键   退   出");
     FlushBatchDraw();
-    Sleep(1000);
+    Sleep(300);
     getch();
 }
 
@@ -205,20 +221,26 @@ void Game()
     {
     labelGame2:Sleep(300);
         cleardevice();
+        mciSendString("close passmusic",NULL,0,NULL);
+        mciSendString("open .\\fireworks.mp3 alias passmusic",NULL,0,NULL);
+        mciSendString("play passmusic",NULL,0,NULL);
         settextcolor(GREEN);
         outtextxy(300,320,"恭    喜   !   你    通   过   了   第   一   关  !");
         FlushBatchDraw();
-        Sleep(2000);
+        Sleep(3000);
         cleardevice();
     }
     else if (remoteLevel == 3)
     {
     labelGame3:Sleep(300);
         cleardevice();
+        mciSendString("close passmusic",NULL,0,NULL);
+        mciSendString("open .\\fireworks.mp3 alias passmusic",NULL,0,NULL);
+        mciSendString("play passmusic",NULL,0,NULL);
         settextcolor(GREEN);
         outtextxy(300,320,"恭    喜   !   你    通   过   了   第   二   关  !");
         FlushBatchDraw();
-        Sleep(2000);
+        Sleep(3000);
         cleardevice();
     }
     
@@ -257,7 +279,7 @@ void Game()
     if(remoteLevel == 3) { FlushBatchDraw();Sleep(500);}              //  进入第三关的过渡
     
     settextcolor(WHITE);                                 //提示玩家存档的操作
-    outtextxy(720,310,"按 M 键 保 存 游 戏);
+    outtextxy(720,310,"按 M 键 保 存 游 戏");
     outtextxy(720,210,"当前分数:");
     
     
@@ -401,14 +423,14 @@ void Game()
         outtextxy(820,210,s);
         
         
-        if (remoteLevel==2&&score >= 3000)              //达到要求，升级进入第三关
+        if (remoteLevel==2&&score >= 2000)              //达到要求，升级进入第三关
         {
             remoteLevel = 3;
             smartState = 0;
             gameState = 1;
             goto labelGame3;
         }
-        if (remoteLevel==1&&score >= 2000)              //达到要求，升级进入第二关
+        if (remoteLevel==1&&score >= 3000)              //达到要求，升级进入第二关
         {
             remoteLevel = 2;
             smartState = 0;
@@ -430,12 +452,14 @@ void Game()
     }
     
 labelGameOver:FlushBatchDraw();
+    mciSendString("close deathmusic",NULL,0,NULL);
+    mciSendString("open .\\death.mp3 alias deathmusic",NULL,0,NULL);
+    mciSendString("play deathmusic",NULL,0,NULL);
     rankList();
-    Sleep(2000);
+    Sleep(1000);
     settextcolor(RED);
     gameOver();
 }
-
 //*****************************=== 恢复旧游戏 ===*****************************//
 void oldStartUp()
 {
@@ -453,23 +477,13 @@ void oldStartUp()
         solidrectangle(i,Height-radius,i+8,Height-2);
     }
     
-    for (i=0; i<=Height; i+=20)
-    {
-        state[0][i/20] = 6;
-        state[Width/20][i/20] = 6;
-    }
-    for (i=20; i<=Width-distance; i+=20) {
-        state[i/20][0] = 6;
-        state[i/20][Height/20] = 6;
-    }
-    
     setcolor(YELLOW);
     setfillcolor(GREEN);
     for (p = head;p != NULL ; p = p->next )
     {fillcircle(p->x,p->y,radius);}
     setcolor(BROWN);
     setfillcolor(RED);
-    for (b = bombFirst;b != NULL ;b = b->next )
+    for (b = bombFirst;b != NULL ;b = b->next)
     {fillcircle(b->x,b->y,radius);}
     setcolor(GREEN);
     setfillcolor(YELLOW);
@@ -484,7 +498,6 @@ void oldStartUp()
         fillcircle(smart_x,smart_y,radius);
     }
 }
-
 //*****************************=== 新游戏状态下的初始化 ===*****************************//
 void newStartUp()
 {
@@ -591,4 +604,3 @@ void newStartUp()
     fillcircle(bombLast->x,bombLast->y,radius);
     state[bombLast->x/20][bombLast->y/20] = 3;
 }
-
