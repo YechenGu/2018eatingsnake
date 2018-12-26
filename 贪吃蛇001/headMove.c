@@ -43,18 +43,18 @@ void headMove()
     //
     if (kbhit())                             // the user touches the keyboard
     {
-        if(smartState == 1)
-        {smartState = 0;}
         input = getch();
         if (input == 'm' )
         {
             loadIn();
             loadStatus = 1;
             setfillcolor(BLACK);
-            solidrectangle(700,300,950,330);
+            solidrectangle(700,220,950,250);
             settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
-            outtextxy(720,310,"游 戏 已 经 保 存");
+            outtextxy(730,230,"游 戏 已 经 保 存");
         }
+        if(smartState == 1 && input != 'm')
+        {smartState = 0;}
         if (input == 'a' )
         {
             if (oldInput == 'd')

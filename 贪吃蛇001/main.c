@@ -67,13 +67,9 @@ int main()
 {
     initgraph(960,Height);     // 初始化画布
     BeginBatchDraw();
+    mciSendString("close dingdongmusic",NULL,0,NULL);
     mciSendString("open .\\battle1.mp3 alias bkmusic",NULL,0,NULL);
     mciSendString("play bkmusic repeat",NULL,0,NULL);
-    settextstyle(18, 0, _T("宋体"));
-    outtextxy(350,200," 请     输      入     姓      名  ");
-    FlushBatchDraw();
-    scanf("%s", user_name);
-    cleardevice();
 labelWelcome:welcomeMain();
     if (gameState == 1)         //选择新游戏
     {
@@ -91,7 +87,9 @@ labelWelcome:welcomeMain();
         {loadOut();}
         else                    //如果没有存档的话，就进行提示
         {
-            outtextxy(310,310," 暂   时   没   有   存   档   ！ ");
+            settextstyle(24, 0, _T("宋体"));
+            outtextxy(360,310," 暂   时   没   有   存   档   ！ ");
+            settextstyle(16, 0, _T("宋体"));
             FlushBatchDraw();
             Sleep(1000);
             cleardevice();
@@ -121,9 +119,9 @@ void welcomeN()                     //  开始新游戏的初始化界面
     rankState = 0;
     score = initScore;
     oldInput = 'd';
-    settextstyle(18, 0, _T("宋体"));
-    outtextxy(350,200," 请     选      择     难     度  ");
-    outtextxy(220,360," 1 ----- 简  单          2 ----- 中  等          3 ----- 困  难   ");
+    settextstyle(20, 0, _T("宋体"));
+    outtextxy(320,200," 请     选      择     难     度  ");
+    outtextxy(200,360," 1 ----- 简  单          2 ----- 中  等          3 ----- 困  难   ");
     settextstyle(16, 0, _T("宋体"));
     FlushBatchDraw();
 labelInvalidInput:difficulty = getch()-48;
@@ -138,8 +136,10 @@ labelInvalidInput:difficulty = getch()-48;
 void welcomeS()    //  读入旧游戏的初始化界面
 {
     settextcolor(GREEN);
-    outtextxy(430,250," 欢   迎   回   来  ");
-    outtextxy(400,350," 加       载        中 ");
+    settextstyle(24, 0, _T("宋体"));
+    outtextxy(360,220," 欢     迎     回     来  ");
+    outtextxy(360,380," 加        载         中 ");
+    settextstyle(16, 0, _T("宋体"));
     rankState = 0;
     FlushBatchDraw();
     Sleep(2000);
@@ -179,17 +179,16 @@ labelInit:    settextcolor(BLUE);
     else if (user_choose == 'g')
     {
         cleardevice();
-        outtextxy(300,100," 绿   色   的   是   聪   明   的   小   蛇");
-        outtextxy(300,200," 蓝   色   的   是   美   味   的   食   物");
-        outtextxy(300,300," 黄   色   的   是   有   毒   的   毒   草");
-        outtextxy(300,400," 红   色   的   是   烈   性   的   炸   药");
-        outtextxy(220,500," 白 色 的 是 智 慧 草 , 也 可 以 敲 击 键 盘 退 出 智 慧 模 式");
-        outtextxy(330,600," 按   任   意   键   退   出");
+        outtextxy(305,100," 通 过 W A S D 键 对 小 蛇 进 行 方 向 操 控");
+        outtextxy(260,200," 撞 到 墙 壁，吃 到 自 己 ，节 数 过 短 小 蛇 都 会 死 亡");
+        outtextxy(240,300," 吃 到 食 物 小 蛇 增 长 一 节 ，吃 到 毒 草 小 蛇 减 短 一 节");
+        outtextxy(305,400," 吃 到 炸 弹 ，小 蛇 身 体 会 炸 掉 一 半");
+        outtextxy(210,500," 更 多 介 绍 ，请 查 询 https://github.com/soviet1941/2018eatingsnake");
+        outtextxy(355,600," 按   任   意   键   退   出");
         FlushBatchDraw();
         mciSendString("close dingdongmusic",NULL,0,NULL);
         mciSendString("open .\\dingdong.mp3 alias dingdongmusic",NULL,0,NULL);
         mciSendString("play dingdongmusic",NULL,0,NULL);
-        Sleep(3000);
         getch();
         gameState = 4;
     }
@@ -216,28 +215,29 @@ void gameOver()
     cleardevice();
     if (rankState == 1)
     {
-        outtextxy(300,280," 恭 喜 ! 你 进 入 了 排 行 榜");
+        outtextxy(320,280," 恭  喜  !  你  进  入  了  排  行  榜");
+        mciSendString("close dingdongmusic",NULL,0,NULL);
         mciSendString("close enterRankmusic",NULL,0,NULL);
         mciSendString("open .\\enterRank.mp3 alias enterRankmusic",NULL,0,NULL);
         mciSendString("play enterRankmusic",NULL,0,NULL);
     }
     else
     {
-        outtextxy(280,280," 很 遗 憾 ， 你 没 有 进 入 排 行 榜");
+        outtextxy(300,280," 很  遗  憾  ， 你  没  有  进  入  排  行  榜");
         mciSendString("close notEnterRankmusic",NULL,0,NULL);
         mciSendString("open .\\notEnterRank.mp3 alias notEnterRankmusic",NULL,0,NULL);
         mciSendString("play notEnterRankmusic",NULL,0,NULL);
     }
-    outtextxy(320,420," 按   任   意   键   退   出");
     FlushBatchDraw();
-    Sleep(300);
+    Sleep(2000);
+    outtextxy(350,520," 按   任   意   键   退   出");
+    FlushBatchDraw();
     getch();
 }
 
 
 void Game()
 {
-    if (gameState == 2) {oldStartUp();}                //  如果选取读档模式，那么就采取读档模式下的初始化方式
     
     if (remoteLevel == 1)                             //  检测当前属于第几关
     {}//normal state
@@ -249,7 +249,7 @@ void Game()
         mciSendString("open .\\fireworks.mp3 alias passmusic",NULL,0,NULL);
         mciSendString("play passmusic",NULL,0,NULL);
         settextcolor(GREEN);
-        outtextxy(300,320,"恭    喜   !   你    通   过   了   第   一   关  !");
+        outtextxy(280,320,"恭    喜   !   你    通   过   了   第   一   关  !");
         FlushBatchDraw();
         Sleep(3000);
         cleardevice();
@@ -262,14 +262,14 @@ void Game()
         mciSendString("open .\\fireworks.mp3 alias passmusic",NULL,0,NULL);
         mciSendString("play passmusic",NULL,0,NULL);
         settextcolor(GREEN);
-        outtextxy(300,320,"恭    喜   !   你    通   过   了   第   二   关  !");
+        outtextxy(280,320,"恭    喜   !   你    通   过   了   第   二   关  !");
         FlushBatchDraw();
         Sleep(3000);
         cleardevice();
     }
     
     if (gameState == 1) {newStartUp();}                 //如果选取新游戏，那么就采取新游戏模式下的初始化方式
-    
+    if (gameState == 2) {oldStartUp();}                //  如果选取读档模式，那么就采取读档模式下的初始化方式
     setfillcolor(BROWN);                                //画出地图里面的墙
     if (remoteLevel == 1)
     {
@@ -298,45 +298,54 @@ void Game()
     
     if(gameState == 1) {generatepoison();}              //新游戏下生成初始毒草
     if(gameState == 1) {generatefood();}                //新游戏下生成初始食物
-
+    
     setfillcolor(BLACK);                                //给予开始游戏前的准备
-    solidrectangle(700,300,950,330);
+    solidrectangle(700,220,950,250);
     settextcolor(WHITE);
-    outtextxy(720,310,"按 任 意 键 开 始");
+    settextstyle(16, 0, _T("宋体"));
+    outtextxy(730,230,"按  任  意  键  开  始");
     
     settextcolor(BLUE);
-    outtextxy(750,350,"游  戏  说  明");
+    settextstyle(24, 0, _T("宋体"));
+    outtextxy(730,315,"游  戏  说  明");
     setcolor(YELLOW);
     setfillcolor(GREEN);
-    fillcircle(750,400,radius);
-    outtextxy(850,400,"蛇    身");
+    fillcircle(740,400,radius);
+    settextstyle(16, 0, _T("宋体"));
+    setcolor(GREEN);
+    outtextxy(830,395,"蛇    身");
     setcolor(GREEN);
     setfillcolor(BLUE);
-    fillcircle(750,450,radius);
-    outtextxy(850,450,"食    物");
+    fillcircle(740,450,radius);
+    setcolor(BLUE);
+    outtextxy(830,445,"食    物");
     setcolor(GREEN);
     setfillcolor(YELLOW);
-    fillcircle(750,500,radius);
-    outtextxy(850,500,"毒    草");
+    fillcircle(740,500,radius);
+    setcolor(YELLOW);
+    outtextxy(830,495,"毒    草");
     setcolor(BROWN);
     setfillcolor(RED);
-    fillcircle(750,550,radius);
-    outtextxy(850,550,"炸    弹");
+    fillcircle(740,550,radius);
+    setcolor(RED);
+    outtextxy(830,545,"炸    弹");
     setcolor(BLUE);
     setfillcolor(WHITE);
-    fillcircle(750,600,radius);
-    outtextxy(850,600,"智  慧  草");
+    fillcircle(740,600,radius);
+    setcolor(WHITE);
+    outtextxy(820,595,"智  慧  草");
     FlushBatchDraw();
     
     getch();
     setfillcolor(BLACK);
-    solidrectangle(700,300,950,360);
+    solidrectangle(700,220,950,250);
     settextcolor(WHITE);
-    outtextxy(720,310,"按 M 键 保 存 游 戏");             //提示玩家存档的操作
+    outtextxy(730,230,"按  M  键 保 存 游 戏");             //提示玩家存档的操作
     FlushBatchDraw();
     settextcolor(WHITE);
-    outtextxy(720,210,"当前分数:");
-    
+    settextstyle(18, 0, _T("宋体"));
+    outtextxy(730,100,"当前分数:");
+    settextstyle(16, 0, _T("宋体"));
     
     while(1)                                              // 在初始化之后，进入游戏的响应事件循环
     {
@@ -353,17 +362,17 @@ void Game()
             fillcircle(poison_x,poison_y,radius);
         }
         
-        if (seed%1000 < 300 )                           // 控制毒草消失
+        if (seed%500 == 300 )                           // 控制毒草消失
         {
             setfillcolor(BLACK);
-            fillcircle(poison_x,poison_y,radius);
+            fillcircle(poison_x,poison_y,10);
             state[poison_x/20][poison_y/20] = 0;
             oldPoison_x = poison_x;
             oldPoison_y = poison_y;
             poison_x = -40;
             poison_y = -40;
         }
-        else                                            // 控制毒草重新出现
+        if (seed%500 == 0 )                                            // 控制毒草重新出现
         {
             if (state[oldPoison_x/20][oldPoison_y/20] != 0)
             {
@@ -374,8 +383,9 @@ void Game()
                 setcolor(GREEN);
                 setfillcolor(YELLOW);
                 fillcircle(oldPoison_x,oldPoison_y,radius);
+                poison_x = oldPoison_x;
+                poison_y = oldPoison_y;
                 state[poison_x/20][poison_y/20] = 2;
-                poisonState = 1;
             }
         }
         
@@ -498,20 +508,22 @@ void Game()
         }
         
         setfillcolor(BLACK);                            //打印分数
-        solidrectangle(800,200,860,230);
+        solidrectangle(830,90,860,120);
         settextcolor(WHITE);
+        settextstyle(18, 0, _T("宋体"));
         sprintf(s,"%d",score);
-        outtextxy(820,210,s);
+        outtextxy(850,100,s);
+        settextstyle(18, 0, _T("宋体"));
         
         
-        if (remoteLevel==2&&score >= 2000)              //达到要求，升级进入第三关
+        if (remoteLevel==2&&score >= 3000)              //达到要求，升级进入第三关
         {
             remoteLevel = 3;
             smartState = 0;
             gameState = 1;
             goto labelGame3;
         }
-        if (remoteLevel==1&&score >= 3000)              //达到要求，升级进入第二关
+        if (remoteLevel==1&&score >= 2000)              //达到要求，升级进入第二关
         {
             remoteLevel = 2;
             smartState = 0;
