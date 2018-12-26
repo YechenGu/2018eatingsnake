@@ -13,12 +13,13 @@
 #define Height 640
 #define distance 20
 #define radius 9
-#define initScore 800
+#define initScore 1000
 #pragma comment(lib,"winmm.lib")
 
 //设计UI界面，完成用户登陆系统
 
 int poison_x,poison_y;
+int oldPoison_x,oldPoison_y;
 int food_x,food_y;
 int smart_x = 20,smart_y = 20;
 int foodState = 1;  //  依然存在食物
@@ -28,7 +29,7 @@ int snakeCount = 3;
 int preSnakeCount = 3;
 int state[33][33];  // 0 -- empty  1 -- food 2 -- poison  3 -- bomb  4 -- snake  5 -- smartGrass  6 -- wall
 int smartState = 0;    // 0--没生成 1--进入智慧模式 2--已经生成还没吃
-
+int rankState;
 
 node *head,*tail,*p1,*p2,*p3,*p;
 node *bombFirst,*bombLast,*b1,*b2,*b3,*b;
@@ -39,6 +40,7 @@ unsigned long seed = 2;
 int a;
 int score = initScore;
 char s[6];
+char user_name[30];
 
 void welcomeMain();
 void welcomeN();
@@ -67,6 +69,11 @@ int main()
     BeginBatchDraw();
     mciSendString("open .\\battle1.mp3 alias bkmusic",NULL,0,NULL);
     mciSendString("play bkmusic repeat",NULL,0,NULL);
+    settextstyle(18, 0, _T("宋体"));
+    outtextxy(350,200," 请     输      入     姓      名  ");
+    FlushBatchDraw();
+    scanf("%s", user_name);
+    cleardevice();
 labelWelcome:welcomeMain();
     if (gameState == 1)         //选择新游戏
     {
@@ -111,6 +118,7 @@ void welcomeN()                     //  开始新游戏的初始化界面
 {
     settextcolor(GREEN);
     remoteLevel = 1;
+    rankState = 0;
     score = initScore;
     oldInput = 'd';
     settextstyle(18, 0, _T("宋体"));
@@ -132,6 +140,7 @@ void welcomeS()    //  读入旧游戏的初始化界面
     settextcolor(GREEN);
     outtextxy(430,250," 欢   迎   回   来  ");
     outtextxy(400,350," 加       载        中 ");
+    rankState = 0;
     FlushBatchDraw();
     Sleep(2000);
     cleardevice();
@@ -205,7 +214,21 @@ labelInit:    settextcolor(BLUE);
 void gameOver()
 {
     cleardevice();
-    outtextxy(240,320," 你   挂   了   ！   按   任   意   键   退   出");
+    if (rankState == 1)
+    {
+        outtextxy(300,280," 恭 喜 ! 你 进 入 了 排 行 榜");
+        mciSendString("close enterRankmusic",NULL,0,NULL);
+        mciSendString("open .\\enterRank.mp3 alias enterRankmusic",NULL,0,NULL);
+        mciSendString("play enterRankmusic",NULL,0,NULL);
+    }
+    else
+    {
+        outtextxy(280,280," 很 遗 憾 ， 你 没 有 进 入 排 行 榜");
+        mciSendString("close notEnterRankmusic",NULL,0,NULL);
+        mciSendString("open .\\notEnterRank.mp3 alias notEnterRankmusic",NULL,0,NULL);
+        mciSendString("play notEnterRankmusic",NULL,0,NULL);
+    }
+    outtextxy(320,420," 按   任   意   键   退   出");
     FlushBatchDraw();
     Sleep(300);
     getch();
@@ -274,12 +297,43 @@ void Game()
     
     if(gameState == 1) {generatepoison();}              //新游戏下生成初始毒草
     if(gameState == 1) {generatefood();}                //新游戏下生成初始食物
+
+    setfillcolor(BLACK);                                //给予开始游戏前的准备
+    solidrectangle(700,300,950,330);
+    settextcolor(WHITE);
+    outtextxy(720,310,"按 任 意 键 开 始");
     
-    if(remoteLevel == 2) { FlushBatchDraw();Sleep(500);}              //  进入第二关的过渡
-    if(remoteLevel == 3) { FlushBatchDraw();Sleep(500);}              //  进入第三关的过渡
+    settextcolor(BLUE);
+    outtextxy(750,350,"游  戏  说  明");
+    setcolor(YELLOW);
+    setfillcolor(GREEN);
+    fillcircle(750,400,radius);
+    outtextxy(850,400,"蛇    身");
+    setcolor(GREEN);
+    setfillcolor(BLUE);
+    fillcircle(750,450,radius);
+    outtextxy(850,450,"食    物");
+    setcolor(GREEN);
+    setfillcolor(YELLOW);
+    fillcircle(750,500,radius);
+    outtextxy(850,500,"毒    草");
+    setcolor(BROWN);
+    setfillcolor(RED);
+    fillcircle(750,550,radius);
+    outtextxy(850,550,"炸    弹");
+    setcolor(BLUE);
+    setfillcolor(WHITE);
+    fillcircle(750,600,radius);
+    outtextxy(850,600,"智  慧  草");
+    FlushBatchDraw();
     
-    settextcolor(WHITE);                                 //提示玩家存档的操作
-    outtextxy(720,310,"按 M 键 保 存 游 戏");
+    getch();
+    setfillcolor(BLACK);
+    solidrectangle(700,300,950,360);
+    settextcolor(WHITE);
+    outtextxy(720,310,"按 M 键 保 存 游 戏");             //提示玩家存档的操作
+    FlushBatchDraw();
+    settextcolor(WHITE);
     outtextxy(720,210,"当前分数:");
     
     
@@ -296,6 +350,32 @@ void Game()
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(poison_x,poison_y,radius);
+        }
+        
+        if (seed%1000 < 300 )                           // 控制毒草消失
+        {
+            setfillcolor(BLACK);
+            fillcircle(poison_x,poison_y,radius);
+            state[poison_x/20][poison_y/20] = 0;
+            oldPoison_x = poison_x;
+            oldPoison_y = poison_y;
+            poison_x = -40;
+            poison_y = -40;
+        }
+        else                                            // 控制毒草重新出现
+        {
+            if (state[oldPoison_x/20][oldPoison_y/20] != 0)
+            {
+                generatepoison();
+            }
+            else
+            {
+                setcolor(GREEN);
+                setfillcolor(YELLOW);
+                fillcircle(oldPoison_x,oldPoison_y,radius);
+                state[poison_x/20][poison_y/20] = 2;
+                poisonState = 1;
+            }
         }
         
         headMove();
@@ -369,13 +449,13 @@ void Game()
             setcolor(BLACK);
             setfillcolor(BLACK);
             fillcircle(tail->x,tail->y,radius);
-            state[tail->x/20][tail->y/20] = 0;      //tail->x显示异常
+            state[tail->x/20][tail->y/20] = 0;
             (tail->previous)->next=NULL;
             tail=tail->previous;
         }
         else if (foodState == 0)
         {
-            score += 100;
+            score += 50*difficulty;
             generatefood();
         }
         else if (poisonState == 0)
@@ -390,7 +470,7 @@ void Game()
             state[tail->x/20][tail->y/20] = 0;
             (tail->previous)->next=NULL;
             tail=tail->previous;
-            score -= 200;
+            score -= 100*difficulty;
             if ( snakeCount<=2)
             {
                 goto labelGameOver;
@@ -408,7 +488,7 @@ void Game()
                 (tail->previous)->next=NULL;
                 tail=tail->previous;
             }
-            score -= 400;
+            score -= 200*difficulty;
             if ( snakeCount<=2)
             {
                 goto labelGameOver;
@@ -456,7 +536,7 @@ labelGameOver:FlushBatchDraw();
     mciSendString("open .\\death.mp3 alias deathmusic",NULL,0,NULL);
     mciSendString("play deathmusic",NULL,0,NULL);
     rankList();
-    Sleep(1000);
+    Sleep(500);
     settextcolor(RED);
     gameOver();
 }

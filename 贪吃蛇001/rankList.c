@@ -4,7 +4,6 @@
 //
 //  Created by macos on 2018/12/17.
 //  Copyright © 2018年 macos-gyc. All rights reserved.
-//  改变了radius的值，有一点小方
 
 #include "rankList.h"
 #include "smartGrass.h"
@@ -17,6 +16,7 @@
 #pragma comment(lib,"winmm.lib")
 extern int score;
 static int rank[5];
+extern int rankState;
 //统计排行榜，判断玩家是否能够进入排行榜
 void rankList()
 {
@@ -28,6 +28,7 @@ void rankList()
     point = score;
     if (point > rank[4])
     {
+        rankState = 1;
         rank[4] = point;
         for(k=3;k>=0;k--)
         {
@@ -69,7 +70,7 @@ void rankListOpen()
         sprintf(sr,"%d",rank[e]);
         outtextxy(500,90*(e+1),sr);
     }
-    outtextxy(280,560," 输 入 任 意 键 返 回 ");
+    outtextxy(280,560," 按 任 意 键 返 回 ");
     FlushBatchDraw();
     mciSendString("close dingdongmusic",NULL,0,NULL);
     mciSendString("open .\\dingdong.mp3 alias dingdongmusic",NULL,0,NULL);

@@ -51,7 +51,7 @@ void headMove()
             loadIn();
             loadStatus = 1;
             setfillcolor(BLACK);
-            solidrectangle(700,300,950,360);
+            solidrectangle(700,300,950,330);
             settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
             outtextxy(720,310,"游 戏 已 经 保 存");
         }
