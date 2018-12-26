@@ -234,6 +234,7 @@ void gameOver()
     getch();
 }
 
+
 void Game()
 {
     if (gameState == 2) {oldStartUp();}                //  如果选取读档模式，那么就采取读档模式下的初始化方式
