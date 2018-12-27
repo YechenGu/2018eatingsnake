@@ -8,7 +8,7 @@
 
 #ifndef generate_h
 #define generate_h
-
+ 
 
 void generatefood();
 void generatepoison();

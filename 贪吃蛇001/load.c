@@ -96,7 +96,7 @@ void loadOut()
             fscanf(fp, "%d ",&state[i][j]);
         }
     }
-    
+     
     fseek(fp, 0L, SEEK_CUR);
     head = (node *)malloc(sizeof(node));
     fscanf(fp, "%d %d ",&head->x,&head->y);

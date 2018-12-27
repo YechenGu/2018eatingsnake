@@ -50,7 +50,7 @@ void headMove()
             loadStatus = 1;
             setfillcolor(BLACK);
             solidrectangle(700,220,950,250);
-            settextcolor(WHITE);                            //提示玩家存档的操作（暂未实现）
+            settextcolor(WHITE);                            //提示玩家存档的操作
             outtextxy(730,230,"游 戏 已 经 保 存");
         }
         if(smartState == 1 && input != 'm')

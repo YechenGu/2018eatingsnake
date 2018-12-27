@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 int m;
-
+ 
 extern char input;
 extern char oldInput;
 extern unsigned long seed;

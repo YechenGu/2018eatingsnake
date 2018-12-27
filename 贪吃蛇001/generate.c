@@ -218,7 +218,7 @@ void generatesmart()
         }
         else { smartState = 0;}
     }
-    
+     
     setcolor(BLUE);
     setfillcolor(WHITE);
     state[smart_x/20][smart_y/20] = 5;

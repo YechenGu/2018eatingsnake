@@ -83,6 +83,7 @@ labelWelcome:welcomeMain();
         fp = fopen(".\\load.txt", "r");     //从文件读出
         fscanf(fp, "%d",&loadStatus);
         fclose(fp);
+        
         if   (loadStatus == 1)
         {loadOut();}
         else                    //如果没有存档的话，就进行提示
@@ -95,6 +96,7 @@ labelWelcome:welcomeMain();
             cleardevice();
             goto labelWelcome;
         }
+        
         Game();
         cleardevice();
     }

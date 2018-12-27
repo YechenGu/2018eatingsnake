@@ -31,7 +31,7 @@ extern int remoteLevel;
 extern unsigned long seed;
 
 void smartGrass()
-{
+{ 
     while(smartState == 1  && foodState == 1)
     {
         seed++;
